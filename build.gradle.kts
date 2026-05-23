@@ -216,7 +216,11 @@ kotlin {
         }
     }
     iosX64 {
-        binaries.framework { baseName = "Nucleo"; xcf.add(this) }
+        binaries.framework {
+            baseName = "Nucleo"
+            isStatic = true
+            xcf.add(this)
+        }
     }
 
     tvosArm64 {
