@@ -4,6 +4,7 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.zip.ZipInputStream
 import org.gradle.api.GradleException
+import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.ClasspathNormalizer
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.testing.AbstractTestTask
@@ -28,7 +29,7 @@ plugins {
 }
 
 group = "io.github.kotlinmania"
-version = "0.1.0"
+version = "0.1.1"
 
 val androidCommandLineToolsRevision = "14742923"
 val projectCompileSdk = "34"
@@ -429,6 +430,53 @@ tasks.register("setupAndroidSdk") {
     }
 }
 
+val swiftExportOutputDir = layout.buildDirectory.dir("swift-test")
+val swiftExportEnvironment = mapOf(
+    "BUILT_PRODUCTS_DIR" to swiftExportOutputDir.get().asFile.absolutePath,
+    "TARGET_BUILD_DIR" to swiftExportOutputDir.get().asFile.absolutePath,
+    "SDK_NAME" to "macosx",
+    "CONFIGURATION" to "Debug",
+    "ARCHS" to "arm64",
+    "FRAMEWORKS_FOLDER_PATH" to "Frameworks",
+    "MACOSX_DEPLOYMENT_TARGET" to "14.0",
+    "DEPLOYMENT_TARGET_SETTING_NAME" to "MACOSX_DEPLOYMENT_TARGET",
+)
+val gradleWrapper = layout.projectDirectory.file(if (isWindowsHost) "gradlew.bat" else "gradlew").asFile
+val swiftTestHarnessDir = layout.projectDirectory.dir("swift-test-harness").asFile
+
+val buildSwiftExportPackageForTest = tasks.register<Exec>("buildSwiftExportPackageForTest") {
+    group = "verification"
+    description = "Builds the Swift Export SPM package used by swiftExportTest."
+    workingDir(layout.projectDirectory.asFile)
+    commandLine(
+        gradleWrapper.absolutePath,
+        "embedSwiftExportForXcode",
+        "--no-daemon",
+        "--no-configuration-cache",
+        "--console=plain",
+    )
+    environment(swiftExportEnvironment)
+    outputs.upToDateWhen { false }
+}
+
+val swiftExportTest = tasks.register<Exec>("swiftExportTest") {
+    group = "verification"
+    description = "Runs swift test against the freshly generated Kotlin Swift Export package."
+    dependsOn(buildSwiftExportPackageForTest)
+    workingDir(swiftTestHarnessDir)
+    commandLine("swift", "test", "--disable-sandbox")
+    outputs.upToDateWhen { false }
+    doFirst {
+        if (!System.getProperty("os.name").lowercase().contains("mac")) {
+            throw GradleException("swiftExportTest requires macOS with Swift/Xcode installed.")
+        }
+        if (!swiftTestHarnessDir.resolve("Package.swift").isFile) {
+            throw GradleException("swiftExportTest requires swift-test-harness/Package.swift.")
+        }
+        swiftTestHarnessDir.resolve(".build").deleteRecursively()
+    }
+}
+
 val fullTargetBuildTasks = listOf(
     "compileAndroidMain",
     "compileAndroidHostTest",
@@ -488,7 +536,7 @@ tasks.named("build") {
 tasks.register("test") {
     group = "verification"
     description =
-        "Runs the host-portable test suite (macOS + JS + WasmJS + Android unit). " +
+        "Runs the local test suite (macOS + Swift Export + JS + WasmJS + Android unit). " +
         "Non-host native targets (mingwX64, linuxX64) only run on their own host."
 
     val defaultTestTasks = listOf(
@@ -501,6 +549,11 @@ tasks.register("test") {
     )
 
     dependsOn(defaultTestTasks.mapNotNull { taskName -> tasks.findByName(taskName) })
+    dependsOn(swiftExportTest)
+}
+
+tasks.named("check") {
+    dependsOn(swiftExportTest)
 }
 
 // The generated Wasm-WASI Node test runner cannot see the filesystem unless

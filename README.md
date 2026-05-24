@@ -140,7 +140,7 @@ Compared to `skim` nucleo does couple simpler (but arguably even more impactful)
 
 ```kotlin
 dependencies {
-    implementation("io.github.kotlinmania:nucleo-kotlin:0.1.0")
+    implementation("io.github.kotlinmania:nucleo-kotlin:0.1.1")
 }
 ```
 
