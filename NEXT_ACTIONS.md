@@ -4,12 +4,12 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 0/7 (0.0%)
-- **Function parity:** 0/80 matched — 0.0%
-- **Class/type parity:** 0/16 matched — 0.0%
-- **Combined symbol parity:** 0/96 matched — 0.0%
-- **Average inline-code cosine:** 0.00 (function body across 0 matched files)
-- **Average documentation cosine:** 0.00 (doc text across 0 matched files)
+- **Files Present:** 1/7 (14.3%)
+- **Function parity:** 14/80 matched (target 20) — 17.5%
+- **Class/type parity:** 1/16 matched (target 6) — 6.2%
+- **Combined symbol parity:** 15/96 matched (target 26) — 15.6%
+- **Average inline-code cosine:** 0.67 (function body across 1 matched files)
+- **Average documentation cosine:** 0.93 (doc text across 1 matched files)
 - **Cheat-zeroed Files:** 0
 - **Critical Issues:** 0 files with <0.60 function similarity
 
@@ -26,6 +26,17 @@ No missing high-value files detected.
 ## Detailed Work Items
 
 Every matched file is listed below with function and type symbol parity.
+
+### 1. par_sort
+
+- **Target:** `nucleo.ParSort`
+- **Similarity:** 0.67
+- **Dependents:** 0
+- **Priority Score:** 1503.3
+- **Functions:** 14/14 matched (target 20)
+- **Missing functions:** _none_
+- **Types:** 1/1 matched (target 6)
+- **Missing types:** _none_
 
 ## Success Criteria
 
@@ -48,4 +59,3 @@ do not treat them as the next implementation target by default.
 | Source | Expected target | Deps | Source path | Expected path |
 |--------|-----------------|------|-------------|---------------|
 | `lib` | `Lib` | 0 | `lib.rs` | `Lib.kt` |
-
