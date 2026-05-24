@@ -1,6 +1,9 @@
 # Kotlin/Gradle build artifacts
 build/
 .gradle/
+.gradle-user-home/
+.home/
+.konan/
 .kotlin/
 *.class
 *.jar
