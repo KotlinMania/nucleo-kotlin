@@ -26,19 +26,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v6.1.0
 
       - name: Build and test iOS targets + XCFramework
-        # The assemble task is named assemble<Name>XCFramework, where <Name> comes from
-        # either:
-        #   - gradle.properties: project.frameworkName (newer repos), or
-        #   - build.gradle.kts: XCFramework("<Name>") (older repos).
+        # This repo registers its XCFramework via `XCFramework("Nucleo")` in build.gradle.kts.
         run: |
-          XCF_NAME="$(grep -E '^project\\.frameworkName=' gradle.properties | head -1 | cut -d= -f2 | tr -d '[:space:]' || true)"
-          if [ -z "$XCF_NAME" ]; then
-            XCF_NAME="$(sed -nE 's/.*XCFramework\\(\"([^\"]+)\"\\).*/\\1/p' build.gradle.kts | head -1 | tr -d '[:space:]' || true)"
-          fi
-          if [ -z "$XCF_NAME" ]; then
-            echo "::error::Unable to determine XCFramework name. Set project.frameworkName in gradle.properties or declare XCFramework(\"<Name>\") in build.gradle.kts."
-            exit 1
-          fi
+          XCF_NAME="Nucleo"
           echo "XCFramework name: $XCF_NAME → task: assemble${XCF_NAME}XCFramework"
           ./gradlew \
             compileKotlinIosArm64 \
