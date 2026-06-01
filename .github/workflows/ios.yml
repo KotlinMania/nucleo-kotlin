@@ -26,15 +26,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v6.1.0
 
       - name: Build and test iOS targets + XCFramework
-        # The XCFramework name is derived per-repo from the
-        # `XCFramework("<Name>")` declaration in build.gradle.kts so this
-        # workflow stays portable across the kotlinmania workspace.
+        # This repo registers its XCFramework via `XCFramework("Nucleo")` in build.gradle.kts.
         run: |
-          XCF_NAME=$(grep -oE 'XCFramework\("[^"]+"\)' build.gradle.kts | head -1 | sed 's/.*"\(.*\)".*/\1/')
-          if [ -z "$XCF_NAME" ]; then
-            echo "::error::No XCFramework(\"<Name>\") declaration found in build.gradle.kts"
-            exit 1
-          fi
+          XCF_NAME="Nucleo"
           echo "XCFramework name: $XCF_NAME → task: assemble${XCF_NAME}XCFramework"
           ./gradlew \
             compileKotlinIosArm64 \
