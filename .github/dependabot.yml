@@ -5,7 +5,7 @@
 # Covers two ecosystems present in this repo:
 #
 #   1. Gradle — kotlin-multiplatform plugin, kotlin-serialization plugin,
-#      android-kotlin-multiplatform-library plugin, vanniktech maven-publish,
+#      com.android.kotlin.multiplatform.library plugin, com.vanniktech.maven.publish plugin,
 #      and the kotlinx-{coroutines,serialization,datetime,collections-immutable}
 #      runtime dependencies declared in build.gradle.kts.
 #
