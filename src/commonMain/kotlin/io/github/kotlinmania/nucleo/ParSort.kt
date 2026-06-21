@@ -242,6 +242,7 @@ private fun <T> breakPatterns(v: MutableList<T>) {
     val len = v.size
     if (len >= 8) {
         var random = len
+
         fun genInt(): Int {
             random = random xor (random shl 13)
             random = random xor (random ushr 17)
@@ -249,9 +250,10 @@ private fun <T> breakPatterns(v: MutableList<T>) {
             return random
         }
 
-        val modulus = len.takeHighestOneBit().let { highest ->
-            if (highest == len) highest else highest shl 1
-        }
+        val modulus =
+            len.takeHighestOneBit().let { highest ->
+                if (highest == len) highest else highest shl 1
+            }
         val pos = len / 4 * 2
 
         for (i in 0 until 3) {
