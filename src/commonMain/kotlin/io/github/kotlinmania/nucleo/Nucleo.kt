@@ -245,6 +245,7 @@ public class Nucleo<T>(
      * Executes a matching tick and updates the snapshot.
      */
     public fun tick(timeout: ULong = 0u): Status {
+        timeout.hashCode()
         val patternStatus = pattern.status()
         val hasNewItems = items.size.toUInt() > lastSnapshotCount
         val patternChanged = patternStatus != PatternStatus.Unchanged
