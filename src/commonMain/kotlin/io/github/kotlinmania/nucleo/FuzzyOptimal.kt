@@ -233,11 +233,13 @@ private fun scoreRowAscii(
         prevMScore = mCell.score
     }
 
-    for (col in adjNextRowOff until haystack.size - 1) {
+    val numColIter = currentRow.size - nextRelativeRowOff
+    for (k in 0 until numColIter) {
+        val col = adjNextRowOff + k
         val (pScore, pMatched) = pScore(prevPScore, prevMScore)
-        val relativeCol = col - needleIdx
+        val relativeCol = nextRelativeRowOff + k
         val scoreCell = currentRow[relativeCol]
-        val matrixCell = matrixCells[matrixCellsOffset + (nextRelativeRowOff - relativeRowOff) + (col - adjNextRowOff)]
+        val matrixCell = matrixCells[matrixCellsOffset + (nextRelativeRowOff - relativeRowOff) + k]
 
         val mCell =
             if (firstRow) {
@@ -455,11 +457,13 @@ private fun scoreRowUnicode(
         prevMScore = mCell.score
     }
 
-    for (col in adjNextRowOff until haystack.size - 1) {
+    val numColIter = currentRow.size - nextRelativeRowOff
+    for (k in 0 until numColIter) {
+        val col = adjNextRowOff + k
         val (pScore, pMatched) = pScore(prevPScore, prevMScore)
-        val relativeCol = col - needleIdx
+        val relativeCol = nextRelativeRowOff + k
         val scoreCell = currentRow[relativeCol]
-        val matrixCell = matrixCells[matrixCellsOffset + (nextRelativeRowOff - relativeRowOff) + (col - adjNextRowOff)]
+        val matrixCell = matrixCells[matrixCellsOffset + (nextRelativeRowOff - relativeRowOff) + k]
 
         val mCell =
             if (firstRow) {

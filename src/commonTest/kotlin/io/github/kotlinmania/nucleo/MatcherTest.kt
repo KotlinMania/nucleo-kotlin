@@ -379,7 +379,7 @@ class MatcherTest {
                     "/.oh-my-zsh/cache",
                     "zsh/c",
                     listOf(8, 9, 10, 11, 12),
-                    BONUS_BOUNDARY * (BONUS_FIRST_CHAR_MULTIPLIER + 2) + BONUS_NON_WORD + bonusBoundaryDelimiter,
+                    BONUS_BOUNDARY * (BONUS_FIRST_CHAR_MULTIPLIER + 3) + bonusBoundaryDelimiter,
                 ),
             ),
         )
