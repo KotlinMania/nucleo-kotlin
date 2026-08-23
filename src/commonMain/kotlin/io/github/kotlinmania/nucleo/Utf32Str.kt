@@ -311,6 +311,10 @@ public sealed class Utf32String : Comparable<Utf32String> {
     override fun compareTo(other: Utf32String): Int = toString().compareTo(other.toString())
 
     public companion object {
+        public fun empty(): Utf32String = Ascii("")
+
+        public fun fromAscii(value: String): Utf32String = Ascii(value)
+
         public fun from(value: String): Utf32String =
             if (hasAsciiGraphemes(value)) {
                 Ascii(value)
