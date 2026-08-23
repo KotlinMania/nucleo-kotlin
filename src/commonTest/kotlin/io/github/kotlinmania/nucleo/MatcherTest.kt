@@ -232,7 +232,7 @@ class MatcherTest {
                     "xFoo-Bar Baz",
                     "foo-b",
                     listOf(1, 2, 3, 4, 5),
-                    BONUS_CAMEL123 * (BONUS_FIRST_CHAR_MULTIPLIER + 2) + 2 * BONUS_NON_WORD,
+                    BONUS_CAMEL123 * (BONUS_FIRST_CHAR_MULTIPLIER + 3) + BONUS_BOUNDARY,
                 ),
             ),
         )
@@ -472,7 +472,7 @@ class MatcherTest {
                     "foo-bar",
                     "o-ba",
                     listOf(2, 3, 4, 5),
-                    BONUS_NON_WORD * 3,
+                    BONUS_NON_WORD + BONUS_BOUNDARY * 2,
                 ),
             ),
         )
