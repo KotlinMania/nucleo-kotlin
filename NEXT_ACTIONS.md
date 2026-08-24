@@ -37,7 +37,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `clone`, `get_unchecked`, `get_item_unchecked`, `matcher_item_refs`, `canceled`, `cleared`, `new`, `tick_inner`, `drop`
 - **Types:** 6/7 matched
 - **Missing types:** `State`
-- **Lint issues:** 1
 
 ### 2. par_sort
 
