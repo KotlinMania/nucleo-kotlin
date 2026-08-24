@@ -150,7 +150,8 @@ public class Snapshot<T> internal constructor(
 internal enum class State {
     Init,
     Cleared,
-    Fresh;
+    Fresh,
+    ;
 
     fun matcherItemRefs(): Int =
         when (this) {

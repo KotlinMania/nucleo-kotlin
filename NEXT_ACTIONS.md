@@ -5,10 +5,10 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 5/7 (71.4%)
-- **Function parity:** 81/105 matched (target 130) — 77.1%
+- **Function parity:** 83/105 matched (target 132) — 79.0%
 - **Class/type parity:** 18/23 matched (target 34) — 78.3%
-- **Combined symbol parity:** 99/128 matched (target 164) — 77.3%
-- **Average inline-code cosine:** 0.57 (function body across 5 matched files)
+- **Combined symbol parity:** 101/128 matched (target 166) — 78.9%
+- **Average inline-code cosine:** 0.58 (function body across 5 matched files)
 - **Average documentation cosine:** 0.41 (doc text across 5 matched files)
 - **Cheat-zeroed Files:** 0
 - **Critical Issues:** 2 files with <0.60 function similarity
@@ -41,14 +41,14 @@ Every matched file is listed below with function and type symbol parity.
 ### 2. boxcar
 
 - **Target:** `nucleo.Boxcar`
-- **Similarity:** 0.25
+- **Similarity:** 0.28
 - **Dependents:** 0
-- **Priority Score:** 274907.5
-- **Functions:** 16/38 matched (target 16)
-- **Missing functions:** `get_or_alloc`, `par_snapshot`, `drop`, `size_hint`, `next`, `next_back`, `drive_unindexed`, `opt_len`, `len`, `drive`, `with_producer`, `into_iter`, `split_at`, `layout`, `alloc`, `dealloc`, `new`, `matcher_cols_raw`, `matcher_cols_mut`, `read`, `extend_with_incorrect_reported_len_is_caught`, `extend_over_max_capacity`
+- **Priority Score:** 254907.2
+- **Functions:** 18/38 matched (target 18)
+- **Missing functions:** `get_or_alloc`, `par_snapshot`, `drop`, `size_hint`, `next`, `next_back`, `drive_unindexed`, `opt_len`, `len`, `drive`, `with_producer`, `into_iter`, `split_at`, `layout`, `alloc`, `dealloc`, `new`, `matcher_cols_raw`, `matcher_cols_mut`, `read`
 - **Types:** 6/11 matched (target 9)
 - **Missing types:** `Item`, `ParIter`, `ParIterProducer`, `IntoIter`, `IncorrectLenIter`
-- **Tests:** 4/6 matched
+- **Tests:** 6/6 matched
 - **Lint issues:** 1
 
 ### 3. lib
