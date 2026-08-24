@@ -1,5 +1,4 @@
-// port-lint: ignore
-// Exercises the common Kotlin sort port; upstream keeps par_sort tests implicit in worker behavior.
+// port-lint: tests par_sort.rs
 package io.github.kotlinmania.nucleo
 
 import kotlin.concurrent.atomics.AtomicBoolean

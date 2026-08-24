@@ -337,16 +337,23 @@ internal fun patternAtoms(pattern: String): Sequence<String> =
 /**
  * A text pattern made up of multiple [Atom]s.
  */
-public data class Pattern(
-    public val atoms: MutableList<Atom> = mutableListOf(),
+public class Pattern(
+    atoms: List<Atom> = emptyList(),
 ) {
+    private val _atoms: MutableList<Atom> = atoms.toMutableList()
+
+    /**
+     * The individual pattern atoms in this pattern.
+     */
+    public val atoms: List<Atom> get() = _atoms
+
     /**
      * Matches this pattern against `haystack` and calculates a ranking score.
      */
     public fun score(haystack: Utf32Str, matcher: Matcher): Long? {
-        if (atoms.isEmpty()) return 0L
+        if (_atoms.isEmpty()) return 0L
         var total = 0L
-        for (atom in atoms) {
+        for (atom in _atoms) {
             val s = atom.score(haystack, matcher) ?: return null
             total += s
         }
@@ -357,9 +364,9 @@ public data class Pattern(
      * Matches this pattern against `haystack`, calculates a ranking score and appends match indices.
      */
     public fun indices(haystack: Utf32Str, matcher: Matcher, indices: MutableList<Int>): Long? {
-        if (atoms.isEmpty()) return 0L
+        if (_atoms.isEmpty()) return 0L
         var total = 0L
-        for (atom in atoms) {
+        for (atom in _atoms) {
             val s = atom.indices(haystack, matcher, indices) ?: return null
             total += s
         }
@@ -370,14 +377,19 @@ public data class Pattern(
      * Refreshes this pattern by reparsing it from a string.
      */
     public fun reparse(pattern: String, caseMatching: CaseMatching, normalize: Normalization) {
-        atoms.clear()
+        _atoms.clear()
         for (pat in patternAtoms(pattern)) {
             val atom = Atom.parse(pat, caseMatching, normalize)
             if (!atom.needle.isEmpty()) {
-                atoms.add(atom)
+                _atoms.add(atom)
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean =
+        other is Pattern && _atoms == other._atoms
+
+    override fun hashCode(): Int = _atoms.hashCode()
 
     /**
      * Convenience function to match and sort a list of inputs.
