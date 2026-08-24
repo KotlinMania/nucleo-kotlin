@@ -5,9 +5,38 @@ import io.github.kotlinmania.nucleo.pattern.MultiPattern
 import io.github.kotlinmania.nucleo.pattern.Status as PatternStatus
 
 /**
+ * Single-abstract-method interface for notification callbacks from matcher workers.
+ */
+public fun interface MatcherNotifier {
+    public fun notifyChanged()
+}
+
+/**
+ * A fixed-size container for multi-column search fields.
+ */
+public class Columns internal constructor(
+    internal val array: Array<Utf32String>,
+) {
+    public val size: Int get() = array.size
+
+    public operator fun get(index: Int): Utf32String = array[index]
+
+    public operator fun set(index: Int, value: Utf32String) {
+        array[index] = value
+    }
+}
+
+/**
+ * Single-abstract-method interface for populating multi-column search fields from an item.
+ */
+public fun interface ColumnFiller<T> {
+    public fun fill(value: T, columns: Columns)
+}
+
+/**
  * A match candidate stored in a [Nucleo] worker.
  */
-public class Item<T>(
+public class Item<T> internal constructor(
     public val data: T,
     public val matcherColumns: List<Utf32String>,
 )
@@ -37,7 +66,7 @@ public data class Status(
 /**
  * A snapshot representing the results of a [Nucleo] worker after finishing a tick.
  */
-public class Snapshot<T>(
+public class Snapshot<T> internal constructor(
     internal var itemCount: UInt = 0u,
     internal val matchesList: MutableList<Match> = mutableListOf(),
     internal val patternSnapshot: MultiPattern = MultiPattern(1),
@@ -69,6 +98,12 @@ public class Snapshot<T>(
             itemsList[m.idx.toInt()]
         }
     }
+
+    /**
+     * Returns the item at the given index without bounds checking.
+     */
+    public fun getItemUnchecked(index: UInt): Item<T> =
+        itemsList[index.toInt()]
 
     /**
      * Returns the item at the given index.
@@ -110,44 +145,85 @@ public class Snapshot<T>(
 }
 
 /**
+ * Internal state for [Nucleo].
+ */
+internal enum class State {
+    Init,
+    Cleared,
+    Fresh;
+
+    fun matcherItemRefs(): Int =
+        when (this) {
+            Cleared -> 1
+            Init, Fresh -> 2
+        }
+
+    fun canceled(): Boolean = this != Fresh
+
+    fun cleared(): Boolean = this != Fresh
+}
+
+/**
  * A handle that allows adding new items to a [Nucleo] worker.
  */
-public class Injector<T>(
+public class Injector<T> internal constructor(
     internal val items: MutableList<Item<T>>,
     internal val cols: Int,
-    internal val notify: () -> Unit,
+    internal val notify: MatcherNotifier,
     internal val parent: Nucleo<T>,
-) {
+) : AutoCloseable {
+    /**
+     * Creates a copy of this injector handle.
+     */
+    public fun clone(): Injector<T> {
+        val inj = Injector(items, cols, notify, parent)
+        parent.addInjector(inj)
+        return inj
+    }
+
     /**
      * Appends an element to the list of matched items.
      */
-    public fun push(value: T, fillColumns: (T, Array<Utf32String>) -> Unit): UInt {
-        val columns = Array<Utf32String>(cols) { Utf32String.empty() }
-        fillColumns(value, columns)
-        val item = Item(value, columns.toList())
+    public fun push(value: T, fillColumns: ColumnFiller<T>): UInt {
+        val columns = Columns(Array(cols) { Utf32String.empty() })
+        fillColumns.fill(value, columns)
+        val item = Item(value, columns.array.toList())
         items.add(item)
         val idx = (items.size - 1).toUInt()
-        notify()
+        notify.notifyChanged()
         return idx
     }
 
     /**
      * Appends multiple elements to the list of matched items.
      */
-    public fun extend(values: Iterable<T>, fillColumns: (T, Array<Utf32String>) -> Unit) {
+    public fun extend(values: Iterable<T>, fillColumns: ColumnFiller<T>) {
+        val columns = Columns(Array(cols) { Utf32String.empty() })
         for (value in values) {
-            val columns = Array<Utf32String>(cols) { Utf32String.empty() }
-            fillColumns(value, columns)
-            val item = Item(value, columns.toList())
+            for (i in 0 until cols) {
+                columns.array[i] = Utf32String.empty()
+            }
+            fillColumns.fill(value, columns)
+            val item = Item(value, columns.array.toList())
             items.add(item)
         }
-        notify()
+        notify.notifyChanged()
     }
 
     /**
      * Returns the total number of items injected in the matcher.
      */
     public fun injectedItems(): UInt = items.size.toUInt()
+
+    /**
+     * Returns the item at the given index without bounds checking.
+     */
+    public fun getUnchecked(index: UInt): Item<T> = items[index.toInt()]
+
+    /**
+     * Returns the item at the given index without bounds checking.
+     */
+    public fun getItemUnchecked(index: UInt): Item<T> = items[index.toInt()]
 
     /**
      * Returns the item at the given index.
@@ -157,7 +233,7 @@ public class Injector<T>(
     /**
      * Detaches this injector from the parent nucleo instance.
      */
-    public fun close() {
+    override fun close() {
         parent.removeInjector(this)
     }
 }
@@ -167,22 +243,35 @@ public class Injector<T>(
  */
 public class Nucleo<T>(
     public var config: Config = Config.DEFAULT,
-    public val notify: () -> Unit = {},
+    public val notify: MatcherNotifier = MatcherNotifier {},
     numThreads: Int? = null,
     public val columns: UInt = 1u,
-) {
+) : AutoCloseable {
     private var items: MutableList<Item<T>> = mutableListOf()
-    private val injectors: MutableList<Injector<T>> = mutableListOf()
+    internal val injectors: MutableList<Injector<T>> = mutableListOf()
     private val snapshotInstance: Snapshot<T> = Snapshot(0u, mutableListOf(), MultiPattern(columns.toInt()), items)
     private var sortResultsFlag: Boolean = true
     private var reverseItemsFlag: Boolean = false
     private var lastSnapshotCount: UInt = 0u
     private var matcher: Matcher = Matcher(config)
+    private var state: State = State.Init
 
     /**
      * The pattern matched by this matcher.
      */
     public val pattern: MultiPattern = MultiPattern(columns.toInt())
+
+    /**
+     * Constructs a new [Nucleo] instance.
+     */
+    public companion object {
+        public fun <T> new(
+            config: Config = Config.DEFAULT,
+            notify: MatcherNotifier = MatcherNotifier {},
+            numThreads: Int? = null,
+            columns: UInt = 1u,
+        ): Nucleo<T> = Nucleo(config, notify, numThreads, columns)
+    }
 
     /**
      * Returns the total number of active injectors.
@@ -203,6 +292,10 @@ public class Nucleo<T>(
         return inj
     }
 
+    internal fun addInjector(injector: Injector<T>) {
+        injectors.add(injector)
+    }
+
     internal fun removeInjector(injector: Injector<T>) {
         injectors.remove(injector)
     }
@@ -214,6 +307,7 @@ public class Nucleo<T>(
         items = mutableListOf()
         injectors.clear()
         lastSnapshotCount = 0u
+        state = State.Cleared
         if (clearSnapshot) {
             snapshotInstance.clear(items)
         }
@@ -245,10 +339,24 @@ public class Nucleo<T>(
      * Executes a matching tick and updates the snapshot.
      */
     public fun tick(timeout: ULong = 0u): Status {
-        timeout.hashCode()
         val patternStatus = pattern.status()
+        val canceled = patternStatus != PatternStatus.Unchanged || state.canceled()
+        val res = tickInner(timeout, canceled, patternStatus)
+        if (!canceled) {
+            return res
+        }
+        state = State.Fresh
+        val status2 = tickInner(timeout, false, PatternStatus.Unchanged)
+        res.changed = res.changed || status2.changed
+        res.running = status2.running
+        return res
+    }
+
+    private fun tickInner(timeout: ULong, canceled: Boolean, status: PatternStatus): Status {
+        timeout.hashCode()
+        status.hashCode()
         val hasNewItems = items.size.toUInt() > lastSnapshotCount
-        val patternChanged = patternStatus != PatternStatus.Unchanged
+        val patternChanged = canceled
 
         if (!hasNewItems && !patternChanged) {
             return Status(changed = false, running = false)
@@ -304,5 +412,19 @@ public class Nucleo<T>(
         snapshotInstance.update(lastSnapshotCount, matches, pattern, currentItems)
 
         return Status(changed = true, running = false)
+    }
+
+    /**
+     * Closes the nucleo instance and clears resources.
+     */
+    override fun close() {
+        injectors.clear()
+    }
+
+    /**
+     * Drops resources associated with this nucleo instance.
+     */
+    public fun drop() {
+        close()
     }
 }
