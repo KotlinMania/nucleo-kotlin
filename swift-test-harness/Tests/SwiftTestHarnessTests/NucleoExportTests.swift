@@ -1,4 +1,4 @@
-import XCTest
+import Testing
 import Nucleo
 
 // Smoke test for the Kotlin → Swift Export → SPM → swift test pipeline.
@@ -28,8 +28,6 @@ import Nucleo
 // Add more meaningful per-API tests below as the Swift Export surface
 // grows. For now the import + a single passing assertion is the
 // canary that the pipeline is green for this repo.
-final class NucleoExportTests: XCTestCase {
-    func testSwiftModuleLoads() throws {
-        XCTAssertTrue(true, "Nucleo swift module imported cleanly")
-    }
+@Test func testSwiftModuleLoads() throws {
+    #expect(true)
 }
