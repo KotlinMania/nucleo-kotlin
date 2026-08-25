@@ -1,4 +1,13 @@
 // port-lint: source lib.rs
+/**
+ * High-level matcher API providing a background worker threadpool and lock-free item injection.
+ *
+ * Designed to run matching in the background while providing snapshots of the last complete
+ * match, allowing UI applications to update match results live without blocking the main UI thread.
+ * Lock-free item injection is provided via [Injector].
+ *
+ * The [Nucleo] class serves as the main API entrypoint.
+ */
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.pattern.MultiPattern

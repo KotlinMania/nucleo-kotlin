@@ -1,4 +1,7 @@
 // port-lint: source boxcar.rs
+/**
+ * A lock-free, append-only vector for storing matcher candidate items across fixed-capacity buckets.
+ */
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.Boxcar.MAX_ENTRIES

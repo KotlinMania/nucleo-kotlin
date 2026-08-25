@@ -1,4 +1,7 @@
 // port-lint: source par_sort.rs
+/**
+ * Parallel quicksort based on pattern-defeating quicksort with cancellation support.
+ */
 package io.github.kotlinmania.nucleo
 
 import kotlin.concurrent.atomics.AtomicBoolean
