@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 5/7 (71.4%)
-- **Function parity:** 96/105 matched (target 148) — 91.4%
-- **Class/type parity:** 19/23 matched (target 35) — 82.6%
-- **Combined symbol parity:** 115/128 matched (target 183) — 89.8%
+- **Function parity:** 96/105 matched (target 150) — 91.4%
+- **Class/type parity:** 20/23 matched (target 36) — 87.0%
+- **Combined symbol parity:** 116/128 matched (target 186) — 90.6%
 - **Average inline-code cosine:** 0.62 (function body across 5 matched files)
 - **Average documentation cosine:** 0.49 (doc text across 5 matched files)
 - **Cheat-zeroed Files:** 0
@@ -41,13 +41,13 @@ Every matched file is listed below with function and type symbol parity.
 ### 2. boxcar
 
 - **Target:** `nucleo.Boxcar`
-- **Similarity:** 0.48
+- **Similarity:** 0.50
 - **Dependents:** 0
-- **Priority Score:** 114905.2
-- **Functions:** 31/38 matched (target 34)
+- **Priority Score:** 104905.0
+- **Functions:** 31/38 matched (target 36)
 - **Missing functions:** `drop`, `size_hint`, `next_back`, `drive_unindexed`, `drive`, `with_producer`, `into_iter`
-- **Types:** 7/11 matched (target 10)
-- **Missing types:** `Item`, `ParIterProducer`, `IntoIter`, `IncorrectLenIter`
+- **Types:** 8/11 matched
+- **Missing types:** `Item`, `ParIterProducer`, `IntoIter`
 - **Tests:** 6/6 matched
 - **Lint issues:** 3
 
@@ -65,9 +65,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 4. par_sort
 
 - **Target:** `nucleo.ParSort`
-- **Similarity:** 0.67
+- **Similarity:** 0.66
 - **Dependents:** 0
-- **Priority Score:** 1503.3
+- **Priority Score:** 1503.4
 - **Functions:** 14/14 matched (target 23)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 7)
