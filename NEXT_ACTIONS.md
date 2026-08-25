@@ -5,11 +5,11 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 5/7 (71.4%)
-- **Function parity:** 83/105 matched (target 132) — 79.0%
-- **Class/type parity:** 18/23 matched (target 34) — 78.3%
-- **Combined symbol parity:** 101/128 matched (target 166) — 78.9%
-- **Average inline-code cosine:** 0.58 (function body across 5 matched files)
-- **Average documentation cosine:** 0.41 (doc text across 5 matched files)
+- **Function parity:** 90/105 matched (target 139) — 85.7%
+- **Class/type parity:** 19/23 matched (target 33) — 82.6%
+- **Combined symbol parity:** 109/128 matched (target 172) — 85.2%
+- **Average inline-code cosine:** 0.60 (function body across 5 matched files)
+- **Average documentation cosine:** 0.49 (doc text across 5 matched files)
 - **Cheat-zeroed Files:** 0
 - **Critical Issues:** 2 files with <0.60 function similarity
 
@@ -41,15 +41,15 @@ Every matched file is listed below with function and type symbol parity.
 ### 2. boxcar
 
 - **Target:** `nucleo.Boxcar`
-- **Similarity:** 0.28
+- **Similarity:** 0.38
 - **Dependents:** 0
-- **Priority Score:** 254907.2
-- **Functions:** 18/38 matched (target 18)
-- **Missing functions:** `get_or_alloc`, `par_snapshot`, `drop`, `size_hint`, `next`, `next_back`, `drive_unindexed`, `opt_len`, `len`, `drive`, `with_producer`, `into_iter`, `split_at`, `layout`, `alloc`, `dealloc`, `new`, `matcher_cols_raw`, `matcher_cols_mut`, `read`
-- **Types:** 6/11 matched (target 9)
-- **Missing types:** `Item`, `ParIter`, `ParIterProducer`, `IntoIter`, `IncorrectLenIter`
-- **Tests:** 6/6 matched
-- **Lint issues:** 1
+- **Priority Score:** 174906.2
+- **Functions:** 25/38 matched (target 28)
+- **Missing functions:** `drop`, `size_hint`, `next_back`, `drive_unindexed`, `drive`, `with_producer`, `into_iter`, `location`, `extend_unique_bucket`, `extend_over_two_buckets`, `extend_over_more_than_two_buckets`, `extend_with_incorrect_reported_len_is_caught`, `extend_over_max_capacity`
+- **Types:** 7/11 matched (target 9)
+- **Missing types:** `Item`, `ParIterProducer`, `IntoIter`, `IncorrectLenIter`
+- **Tests:** 0/6 matched
+- **Lint issues:** 3
 
 ### 3. lib
 
@@ -68,9 +68,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.67
 - **Dependents:** 0
 - **Priority Score:** 1503.3
-- **Functions:** 14/14 matched (target 23)
+- **Functions:** 14/14 matched (target 20)
 - **Missing functions:** _none_
-- **Types:** 1/1 matched (target 7)
+- **Types:** 1/1 matched (target 6)
 - **Missing types:** _none_
 
 ### 5. pattern

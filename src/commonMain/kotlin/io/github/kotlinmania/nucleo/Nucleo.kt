@@ -64,7 +64,7 @@ public data class Status(
 )
 
 /**
- * A snapshot representing the results of a [Nucleo] worker after finishing a tick.
+ * A snapshot representing the results of a [Nucleo] worker after finishing a [Nucleo.tick].
  */
 public class Snapshot<T> internal constructor(
     internal var itemCount: UInt = 0u,
@@ -88,7 +88,8 @@ public class Snapshot<T> internal constructor(
     public fun matchedItemCount(): UInt = matchesList.size.toUInt()
 
     /**
-     * Returns the items corresponding to the matches in this snapshot.
+     * Returns an iterator/list over the items that correspond to a subrange of
+     * all the matches in this snapshot.
      */
     public fun matchedItems(range: IntRange = matchesList.indices): List<Item<T>> {
         if (matchesList.isEmpty()) return emptyList()
@@ -100,13 +101,15 @@ public class Snapshot<T> internal constructor(
     }
 
     /**
-     * Returns the item at the given index without bounds checking.
+     * Returns a reference to the item at the given index without bounds checking.
      */
     public fun getItemUnchecked(index: UInt): Item<T> =
         itemsList[index.toInt()]
 
     /**
-     * Returns the item at the given index.
+     * Returns a reference to the item at the given index.
+     *
+     * Returns `null` if the given index is not initialized.
      */
     public fun getItem(index: UInt): Item<T>? =
         itemsList.getOrNull(index.toInt())
@@ -117,7 +120,9 @@ public class Snapshot<T> internal constructor(
     public fun matches(): List<Match> = matchesList
 
     /**
-     * Returns the item corresponding to the [n]th match.
+     * A convenience function to return the [Item] corresponding to the [n]th match.
+     *
+     * Returns `null` if [n] is greater than or equal to the match count.
      */
     public fun getMatchedItem(n: UInt): Item<T>? {
         val m = matchesList.getOrNull(n.toInt()) ?: return null
@@ -149,7 +154,9 @@ public class Snapshot<T> internal constructor(
  */
 internal enum class State {
     Init,
+    /** items have been cleared but snapshot and items are still outdated */
     Cleared,
+    /** items are fresh */
     Fresh,
     ;
 
@@ -166,6 +173,8 @@ internal enum class State {
 
 /**
  * A handle that allows adding new items to a [Nucleo] worker.
+ *
+ * It is internally reference counted and can be cheaply cloned and sent across threads.
  */
 public class Injector<T> internal constructor(
     internal val items: MutableList<Item<T>>,
@@ -184,6 +193,7 @@ public class Injector<T> internal constructor(
 
     /**
      * Appends an element to the list of matched items.
+     * This function is lock-free and wait-free.
      */
     public fun push(value: T, fillColumns: ColumnFiller<T>): UInt {
         val columns = Columns(Array(cols) { Utf32String.empty() })
@@ -197,6 +207,12 @@ public class Injector<T> internal constructor(
 
     /**
      * Appends multiple elements to the list of matched items.
+     * This function is lock-free and wait-free.
+     *
+     * You should favor this function over [push] if at least one of the following is true:
+     * - the number of items you're adding can be computed beforehand and is typically larger than 1k
+     * - you're able to batch incoming items
+     * - you're adding items from multiple threads concurrently
      */
     public fun extend(values: Iterable<T>, fillColumns: ColumnFiller<T>) {
         val columns = Columns(Array(cols) { Utf32String.empty() })
@@ -212,7 +228,8 @@ public class Injector<T> internal constructor(
     }
 
     /**
-     * Returns the total number of items injected in the matcher.
+     * Returns the total number of items injected in the matcher. This might
+     * not match the number of items in the match snapshot (if the matcher is still running).
      */
     public fun injectedItems(): UInt = items.size.toUInt()
 
@@ -227,7 +244,7 @@ public class Injector<T> internal constructor(
     public fun getItemUnchecked(index: UInt): Item<T> = items[index.toInt()]
 
     /**
-     * Returns the item at the given index.
+     * Returns the item at the given index, or null if not initialized.
      */
     public fun get(index: UInt): Item<T>? = items.getOrNull(index.toInt())
 
@@ -240,7 +257,7 @@ public class Injector<T> internal constructor(
 }
 
 /**
- * A high-level matcher worker that computes matches.
+ * A high-level matcher worker that quickly computes matches in a background threadpool.
  */
 public class Nucleo<T>(
     public var config: Config = Config.DEFAULT,
@@ -258,7 +275,10 @@ public class Nucleo<T>(
     private var state: State = State.Init
 
     /**
-     * The pattern matched by this matcher.
+     * The pattern matched by this matcher. To update the match pattern
+     * [MultiPattern.reparse] should be used.
+     * Note that the matcher worker will only become aware of the new pattern
+     * after a call to [tick].
      */
     public val pattern: MultiPattern = MultiPattern(columns.toInt())
 
@@ -266,6 +286,13 @@ public class Nucleo<T>(
      * Constructs a new [Nucleo] instance.
      */
     public companion object {
+        /**
+         * Constructs a new nucleo worker threadpool with the provided [config].
+         *
+         * [notify] is called everytime new information is available and [tick] should be called.
+         * If `null` is passed for [numThreads], nucleo will use one thread per hardware thread.
+         * [columns] indicates how many matching columns each item (and the pattern) has.
+         */
         public fun <T> new(
             config: Config = Config.DEFAULT,
             notify: MatcherNotifier = MatcherNotifier {},
@@ -302,7 +329,11 @@ public class Nucleo<T>(
     }
 
     /**
-     * Restarts the item stream.
+     * Restarts the item stream. Removes all items and disconnects all
+     * previously created injectors from this instance. If [clearSnapshot]
+     * is `true` then all items and matches are removed from the [Snapshot]
+     * immediately. Otherwise the snapshot will keep the current matches until
+     * the matcher has run again.
      */
     public fun restart(clearSnapshot: Boolean) {
         items = mutableListOf()
@@ -324,6 +355,7 @@ public class Nucleo<T>(
 
     /**
      * Sets whether the matcher should sort search results by score after matching.
+     * Defaults to true.
      */
     public fun sortResults(sortResults: Boolean) {
         this.sortResultsFlag = sortResults
@@ -331,13 +363,15 @@ public class Nucleo<T>(
 
     /**
      * Sets whether the matcher should reverse the order of the input.
+     * Defaults to false.
      */
     public fun reverseItems(reverseItems: Boolean) {
         this.reverseItemsFlag = reverseItems
     }
 
     /**
-     * Executes a matching tick and updates the snapshot.
+     * The main way to interact with the matcher, this should be called regularly.
+     * To avoid excessive redraws this method can wait [timeout] milliseconds.
      */
     public fun tick(timeout: ULong = 0u): Status {
         val patternStatus = pattern.status()
