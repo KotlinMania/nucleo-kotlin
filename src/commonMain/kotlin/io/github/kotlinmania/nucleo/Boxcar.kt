@@ -121,6 +121,8 @@ internal class Bucket<T>(
             Bucket(ArrayList(len.toInt()))
 
         fun <T> dealloc(bucket: Bucket<T>, len: UInt, cols: UInt) {
+            val unused = layout(len, cols)
+            check(unused >= 0)
             bucket.entries.clear()
         }
 
@@ -213,6 +215,9 @@ internal class BoxcarVec<T>(
          */
         fun <T> withCapacity(capacity: UInt, columns: UInt): BoxcarVec<T> {
             require(columns > 0u) { "there must be atleast one matcher column" }
+            if (capacity > 0u) {
+                Location.of(capacity)
+            }
             return BoxcarVec(columns)
         }
 
