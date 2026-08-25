@@ -69,13 +69,22 @@ class BoxcarTest {
     @Test
     fun extendWithIncorrectReportedLenIsCaught() {
         val vec = BoxcarVec.withCapacity<UInt>(1u, 1u)
-        vec.extend(0u until 10u) { _, _ -> }
-        assertEquals(10u, vec.count())
+        val iter = IncorrectLenIter(10, (0u until 12u).iterator())
+        vec.extend(Iterable { iter }) { _, _ -> }
+        assertEquals(12u, vec.count())
     }
 
     @Test
     fun extendOverMaxCapacity() {
         val vec = BoxcarVec.withCapacity<UInt>(1u, 1u)
         assertEquals(0u, vec.count())
+    }
+
+    private class IncorrectLenIter(
+        val len: Int,
+        private val iter: Iterator<UInt>,
+    ) : Iterator<UInt> {
+        override fun hasNext(): Boolean = iter.hasNext()
+        override fun next(): UInt = iter.next()
     }
 }

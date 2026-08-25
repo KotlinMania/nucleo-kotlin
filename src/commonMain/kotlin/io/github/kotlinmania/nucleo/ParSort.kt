@@ -62,6 +62,14 @@ private fun <T> shiftTail(v: MutableList<T>, isLess: (T, T) -> Boolean) {
     }
 }
 
+internal const val MAX_STEPS: Int = 5
+internal const val SHORTEST_SHIFTING: Int = 50
+internal const val BLOCK: Int = 128
+internal const val SHORTEST_MEDIAN_OF_MEDIANS: Int = 50
+internal const val MAX_SWAPS: Int = 4 * 3
+internal const val MAX_INSERTION: Int = 20
+internal const val MAX_SEQUENTIAL: Int = 2000
+
 /**
  * Partially sorts a slice by shifting several out-of-order elements around.
  *
@@ -69,13 +77,10 @@ private fun <T> shiftTail(v: MutableList<T>, isLess: (T, T) -> Boolean) {
  * *O*(*n*) worst-case.
  */
 private fun <T> partialInsertionSort(v: MutableList<T>, isLess: (T, T) -> Boolean): Boolean {
-    val maxSteps = 5
-    val shortestShifting = 50
-
     val len = v.size
     var i = 1
 
-    repeat(maxSteps) {
+    repeat(MAX_STEPS) {
         while (i < len && !isLess(v[i], v[i - 1])) {
             i += 1
         }
@@ -84,7 +89,7 @@ private fun <T> partialInsertionSort(v: MutableList<T>, isLess: (T, T) -> Boolea
             return true
         }
 
-        if (len < shortestShifting) {
+        if (len < SHORTEST_SHIFTING) {
             return false
         }
 
@@ -104,7 +109,7 @@ private fun <T> insertionSort(v: MutableList<T>, isLess: (T, T) -> Boolean) {
 }
 
 /** Sorts `v` using heapsort, which guarantees *O*(*n* * log(*n*)) worst-case. */
-private fun <T> heapSort(v: MutableList<T>, isLess: (T, T) -> Boolean) {
+private fun <T> heapsort(v: MutableList<T>, isLess: (T, T) -> Boolean) {
     fun siftDown(end: Int, start: Int) {
         var node = start
         while (true) {
@@ -277,9 +282,6 @@ private fun <T> breakPatterns(v: MutableList<T>) {
  * Elements in `v` might be reordered in the process.
  */
 private fun <T> choosePivot(v: MutableList<T>, isLess: (T, T) -> Boolean): PivotChoice {
-    val shortestMedianOfMedians = 50
-    val maxSwaps = 4 * 3
-
     val len = v.size
     var a = len / 4
     var b = len / 4 * 2
@@ -302,7 +304,7 @@ private fun <T> choosePivot(v: MutableList<T>, isLess: (T, T) -> Boolean): Pivot
     }
 
     if (len >= 8) {
-        if (len >= shortestMedianOfMedians) {
+        if (len >= SHORTEST_MEDIAN_OF_MEDIANS) {
             a = sort3(a - 1, a, a + 1).second
             b = sort3(b - 1, b, b + 1).second
             c = sort3(c - 1, c, c + 1).second
@@ -311,7 +313,7 @@ private fun <T> choosePivot(v: MutableList<T>, isLess: (T, T) -> Boolean): Pivot
         b = sort3(a, b, c).second
     }
 
-    return if (swaps < maxSwaps) {
+    return if (swaps < MAX_SWAPS) {
         PivotChoice(b, swaps == 0)
     } else {
         v.reverse()
@@ -335,9 +337,6 @@ private fun <T> recurse(
     limit: Int,
     canceled: AtomicBoolean,
 ): Boolean {
-    val maxInsertion = 20
-    val maxSequential = 2_000
-
     var current = v
     var predecessor = pred
     var remainingLimit = limit
@@ -347,13 +346,13 @@ private fun <T> recurse(
     while (true) {
         val len = current.size
 
-        if (len <= maxInsertion) {
+        if (len <= MAX_INSERTION) {
             insertionSort(current, isLess)
             return false
         }
 
         if (remainingLimit == 0) {
-            heapSort(current, isLess)
+            heapsort(current, isLess)
             return false
         }
 
@@ -386,7 +385,7 @@ private fun <T> recurse(
         val pivotValue = current[mid]
         val right = current.subList(mid + 1, current.size)
 
-        if (max(left.size, right.size) <= maxSequential) {
+        if (max(left.size, right.size) <= MAX_SEQUENTIAL) {
             if (left.size < right.size) {
                 recurse(left, isLess, predecessor, remainingLimit, canceled)
                 current = right
