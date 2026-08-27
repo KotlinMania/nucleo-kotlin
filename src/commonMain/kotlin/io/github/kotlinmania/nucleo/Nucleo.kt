@@ -163,8 +163,10 @@ public class Snapshot<T> internal constructor(
  */
 internal enum class State {
     Init,
+
     /** items have been cleared but snapshot and items are still outdated */
     Cleared,
+
     /** items are fresh */
     Fresh,
     ;
