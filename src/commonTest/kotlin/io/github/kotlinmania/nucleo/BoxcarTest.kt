@@ -85,6 +85,7 @@ class BoxcarTest {
         private val iter: Iterator<UInt>,
     ) : Iterator<UInt> {
         override fun hasNext(): Boolean = iter.hasNext()
+
         override fun next(): UInt = iter.next()
     }
 }
