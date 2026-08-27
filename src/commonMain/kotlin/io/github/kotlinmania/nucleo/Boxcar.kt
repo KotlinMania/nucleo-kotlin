@@ -62,12 +62,42 @@ internal class Iter<T>(
 ) : Iterator<SnapshotItem<T>> {
     fun end(): UInt = end
 
+    fun sizeHint(): Pair<Int, Int?> =
+        (end - idx).toInt() to (end - idx).toInt()
+
+    fun len(): Int = (end - idx).toInt()
+
+    fun nextBack(): SnapshotItem<T>? = null
+
     override fun hasNext(): Boolean = idx < end
 
     override fun next(): SnapshotItem<T> {
         val curr = idx
         idx++
         return curr to vec.get(curr)
+    }
+}
+
+/**
+ * IntoIter iterator alias for [Iter].
+ */
+internal typealias IntoIter<T> = Iter<T>
+
+/**
+ * Producer for parallel iterator splits.
+ */
+internal class ParIterProducer<T>(
+    val start: UInt,
+    val end: UInt,
+    val vec: BoxcarVec<T>,
+) {
+    fun intoIter(): Iter<T> =
+        Iter(Location.of(start), start, end, vec)
+
+    fun splitAt(index: Int): Pair<ParIterProducer<T>, ParIterProducer<T>> {
+        require(index <= (end - start).toInt())
+        val idx = index.toUInt()
+        return ParIterProducer(start, start + idx, vec) to ParIterProducer(start + idx, end, vec)
     }
 }
 
@@ -79,14 +109,35 @@ internal class ParIter<T>(
     val end: UInt,
     val vec: BoxcarVec<T>,
 ) {
-    fun optLen(): UInt = end - start
+    fun optLen(): Int? = (end - start).toInt()
 
-    fun len(): UInt = end - start
+    fun len(): Int = (end - start).toInt()
+
+    fun end(): UInt = end
+
+    fun start(): UInt = start
 
     fun splitAt(index: UInt): Pair<ParIter<T>, ParIter<T>> {
         val mid = (start + index).coerceAtMost(end)
         return ParIter(start, mid, vec) to ParIter(mid, end, vec)
     }
+
+    fun driveUnindexed(consumer: (SnapshotItem<T>) -> Unit) {
+        val iter = intoIter()
+        while (iter.hasNext()) {
+            consumer(iter.next())
+        }
+    }
+
+    fun drive(consumer: (SnapshotItem<T>) -> Unit) {
+        driveUnindexed(consumer)
+    }
+
+    fun withProducer(): ParIterProducer<T> =
+        ParIterProducer(start, end, vec)
+
+    fun intoIter(): Iter<T> =
+        Iter(Location.of(start), start, end, vec)
 }
 
 /**
@@ -207,6 +258,19 @@ internal class BoxcarVec<T>(
         val end = count()
         require(start <= end) { "index $start is out of bounds!" }
         return ParIter(start, end, this)
+    }
+
+    /**
+     * Returns an iterator over all items in the vector.
+     */
+    fun intoIter(): Iter<T> =
+        Iter(Location.of(0u), 0u, count(), this)
+
+    /**
+     * Drops all stored entries in this vector.
+     */
+    fun drop() {
+        entries.clear()
     }
 
     companion object {
