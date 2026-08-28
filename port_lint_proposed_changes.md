@@ -1,9 +1,31 @@
 # port-lint Proposed Changes
 
 **Generated:** 2026-08-28
-**Source:** tmp/nucleo/src
-**Target:** src/commonMain/kotlin/io/github/kotlinmania/nucleo
+**Source:** tmp/nucleo
+**Target:** src/commonMain/kotlin
 
 These are review proposals only. They are emitted when a Rust -> Kotlin pair matches only after fallback normalization, so the existing `port-lint` header is not an exact provenance match.
 
-_No fallback provenance matches detected._
+| Target file | Current header | Proposed header | Source path | Reason |
+|-------------|----------------|-----------------|-------------|--------|
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Config.kt` | `// port-lint: source config.rs` | `// port-lint: source config.rs` | `config.rs` | `port-lint provenance header matched only after fallback normalization: 'config.rs' vs expected 'config.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Utf32Str.kt` | `// port-lint: source utf32_str.rs` | `// port-lint: source utf32_str.rs` | `utf32_str.rs` | `port-lint provenance header matched only after fallback normalization: 'utf32_str.rs' vs expected 'utf32_str.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/chars/Chars.kt` | `// port-lint: source chars.rs` | `// port-lint: source chars.rs` | `chars.rs` | `port-lint provenance header matched only after fallback normalization: 'chars.rs' vs expected 'chars.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/chars/Normalize.kt` | `// port-lint: source chars/normalize.rs` | `// port-lint: source chars/normalize.rs` | `chars/normalize.rs` | `port-lint provenance header matched only after fallback normalization: 'chars/normalize.rs' vs expected 'chars/normalize.rs'` |
+| `src/commonTest/kotlin/io/github/kotlinmania/nucleo/NormalizeTest.kt` | `// port-lint: tests chars/normalize.rs` | `// port-lint: tests chars/normalize.rs` | `chars/normalize.rs` | `port-lint provenance header matched only after fallback normalization: 'tests:chars/normalize.rs' vs expected 'chars/normalize.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Worker.kt` | `// port-lint: source worker.rs` | `// port-lint: source worker.rs` | `worker.rs` | `port-lint provenance header matched only after fallback normalization: 'worker.rs' vs expected 'worker.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Matcher.kt` | `// port-lint: source lib.rs` | `// port-lint: source lib.rs` | `lib.rs` | `port-lint provenance header matched only after fallback normalization: 'lib.rs' vs expected 'lib.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Nucleo.kt` | `// port-lint: source lib.rs` | `// port-lint: source lib.rs` | `lib.rs` | `port-lint provenance header matched only after fallback normalization: 'lib.rs' vs expected 'lib.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Matrix.kt` | `// port-lint: source matrix.rs` | `// port-lint: source matrix.rs` | `matrix.rs` | `port-lint provenance header matched only after fallback normalization: 'matrix.rs' vs expected 'matrix.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/FuzzyOptimal.kt` | `// port-lint: source fuzzy_optimal.rs` | `// port-lint: source fuzzy_optimal.rs` | `fuzzy_optimal.rs` | `port-lint provenance header matched only after fallback normalization: 'fuzzy_optimal.rs' vs expected 'fuzzy_optimal.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/pattern/Pattern.kt` | `// port-lint: source pattern.rs` | `// port-lint: source pattern.rs` | `pattern.rs` | `port-lint provenance header matched only after fallback normalization: 'pattern.rs' vs expected 'pattern.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/pattern/MultiPattern.kt` | `// port-lint: source pattern.rs` | `// port-lint: source pattern.rs` | `pattern.rs` | `port-lint provenance header matched only after fallback normalization: 'pattern.rs' vs expected 'pattern.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Boxcar.kt` | `// port-lint: source boxcar.rs` | `// port-lint: source boxcar.rs` | `boxcar.rs` | `port-lint provenance header matched only after fallback normalization: 'boxcar.rs' vs expected 'boxcar.rs'` |
+| `src/commonTest/kotlin/io/github/kotlinmania/nucleo/BoxcarTest.kt` | `// port-lint: tests boxcar.rs` | `// port-lint: tests boxcar.rs` | `boxcar.rs` | `port-lint provenance header matched only after fallback normalization: 'tests:boxcar.rs' vs expected 'boxcar.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/ParSort.kt` | `// port-lint: source par_sort.rs` | `// port-lint: source par_sort.rs` | `par_sort.rs` | `port-lint provenance header matched only after fallback normalization: 'par_sort.rs' vs expected 'par_sort.rs'` |
+| `src/commonTest/kotlin/io/github/kotlinmania/nucleo/ParSortTest.kt` | `// port-lint: tests par_sort.rs` | `// port-lint: tests par_sort.rs` | `par_sort.rs` | `port-lint provenance header matched only after fallback normalization: 'tests:par_sort.rs' vs expected 'par_sort.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Exact.kt` | `// port-lint: source exact.rs` | `// port-lint: source exact.rs` | `exact.rs` | `port-lint provenance header matched only after fallback normalization: 'exact.rs' vs expected 'exact.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Prefilter.kt` | `// port-lint: source prefilter.rs` | `// port-lint: source prefilter.rs` | `prefilter.rs` | `port-lint provenance header matched only after fallback normalization: 'prefilter.rs' vs expected 'prefilter.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/Score.kt` | `// port-lint: source score.rs` | `// port-lint: source score.rs` | `score.rs` | `port-lint provenance header matched only after fallback normalization: 'score.rs' vs expected 'score.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/FuzzyGreedy.kt` | `// port-lint: source fuzzy_greedy.rs` | `// port-lint: source fuzzy_greedy.rs` | `fuzzy_greedy.rs` | `port-lint provenance header matched only after fallback normalization: 'fuzzy_greedy.rs' vs expected 'fuzzy_greedy.rs'` |
+| `src/commonMain/kotlin/io/github/kotlinmania/nucleo/chars/CaseFold.kt` | `// port-lint: source chars/case_fold.rs` | `// port-lint: source chars/case_fold.rs` | `chars/case_fold.rs` | `port-lint provenance header matched only after fallback normalization: 'chars/case_fold.rs' vs expected 'chars/case_fold.rs'` |
