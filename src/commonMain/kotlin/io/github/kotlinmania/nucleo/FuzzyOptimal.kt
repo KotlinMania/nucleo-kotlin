@@ -554,3 +554,21 @@ private fun reconstructOptimalPath(
         indices.add(p)
     }
 }
+
+internal fun Matcher.fuzzyMatchOptimal(
+    haystack: ByteArray,
+    needle: ByteArray,
+    start: Int,
+    greedyEnd: Int,
+    end: Int,
+    indices: MutableList<Int>? = null,
+): Int? = fuzzyMatchOptimalAscii(config, haystack, needle, start, greedyEnd, end, indices)
+
+internal fun Matcher.fuzzyMatchOptimal(
+    haystack: CharArray,
+    needle: CharArray,
+    start: Int,
+    greedyEnd: Int,
+    end: Int,
+    indices: MutableList<Int>? = null,
+): Int? = fuzzyMatchOptimalUnicode(config, haystack, needle, start, greedyEnd, end, indices)
