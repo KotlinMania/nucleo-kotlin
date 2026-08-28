@@ -86,7 +86,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests chars/normalize.rs` (current: `// port-lint: tests chars/normalize.rs`)
 - **Lint issues:** 2
 
-### 5. worker
+### 5. nucleo.worker
 
 - **Target:** `nucleo.Worker [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.75
@@ -100,7 +100,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: source worker.rs` (current: `// port-lint: source worker.rs`)
 - **Lint issues:** 1
 
-### 6. lib
+### 6. nucleo.lib
 
 - **Target:** `nucleo.Matcher [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.00
@@ -170,7 +170,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: source pattern.rs` (current: `// port-lint: source pattern.rs`)
 - **Lint issues:** 1
 
-### 11. pattern
+### 11. nucleo.pattern
 
 - **Target:** `pattern.MultiPattern [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.61
@@ -184,7 +184,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: source pattern.rs` (current: `// port-lint: source pattern.rs`)
 - **Lint issues:** 1
 
-### 12. boxcar
+### 12. nucleo.boxcar
 
 - **Target:** `nucleo.Boxcar [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.63
@@ -201,7 +201,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Proposed provenance header:** `// port-lint: tests boxcar.rs` (current: `// port-lint: tests boxcar.rs`)
 - **Lint issues:** 2
 
-### 13. par_sort
+### 13. nucleo.par_sort
 
 - **Target:** `nucleo.ParSort [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.66
