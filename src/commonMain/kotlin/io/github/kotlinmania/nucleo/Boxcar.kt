@@ -8,6 +8,11 @@ import io.github.kotlinmania.nucleo.Boxcar.MAX_ENTRIES
 import io.github.kotlinmania.nucleo.Boxcar.SKIP
 import io.github.kotlinmania.nucleo.Boxcar.SKIP_BUCKET
 
+/**
+ * Associated type marker for `Item` in [Boxcar].
+ */
+public interface BoxcarItem
+
 internal object Boxcar {
     /**
      * Skip the shorter buckets to avoid unnecessary allocations.
@@ -59,7 +64,12 @@ internal class Iter<T>(
     var idx: UInt,
     val end: UInt,
     val vec: BoxcarVec<T>,
-) : Iterator<SnapshotItem<T>> {
+) : Iterator<Pair<UInt, Item<T>?>> {
+    /**
+     * Associated type marker for `Iterator::Item` on [Iter].
+     */
+    public interface Item
+
     fun end(): UInt = end
 
     fun sizeHint(): Pair<Int, Int?> =
