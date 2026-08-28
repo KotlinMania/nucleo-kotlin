@@ -289,3 +289,78 @@ internal fun substringMatchNonAscii(
     val needleChars = CharArray(needleLen) { needle.get(it) }
     return calculateScoreUnicode(config, haystack, needleChars, start + maxPos, start + maxPos + needleLen, indices)
 }
+
+internal fun substringMatchAsciiWithPrefilter(
+    config: Config,
+    haystack: ByteArray,
+    needle: ByteArray,
+    prefilterLen: Int,
+    prefilter: Sequence<Int>,
+): Pair<Int, Int> {
+    val needleWithoutPrefilter = needle.copyOfRange(prefilterLen, needle.size)
+    var maxScore = 0
+    var maxPos = 0
+    for (i in prefilter) {
+        val prevCharClass =
+            if (i > 0) {
+                AsciiChar(haystack[i - 1]).charClass(config)
+            } else {
+                config.initialCharClass
+            }
+        val charClass = AsciiChar(haystack[i]).charClass(config)
+        val bonus = config.bonusFor(prevCharClass, charClass)
+        val score = bonus * BONUS_FIRST_CHAR_MULTIPLIER + SCORE_MATCH
+        val endIdx = minOf(i + needle.size, haystack.size)
+        val haySub = haystack.copyOfRange(i + prefilterLen, endIdx)
+        var matches = haySub.size == needleWithoutPrefilter.size
+        if (matches) {
+            for (idx in haySub.indices) {
+                if (AsciiChar(haySub[idx]).normalize(config).byte != needleWithoutPrefilter[idx]) {
+                    matches = false
+                    break
+                }
+            }
+        }
+        if (score > maxScore && matches) {
+            maxPos = i
+            maxScore = score
+            if (bonus >= config.bonusBoundaryWhite) {
+                break
+            }
+        }
+    }
+    return Pair(maxScore, maxPos)
+}
+
+internal fun Matcher.substringMatch1Ascii(
+    haystack: ByteArray,
+    c: Byte,
+    indices: MutableList<Int>? = null,
+): Int? = substringMatch1Ascii(config, haystack, c, indices)
+
+internal fun Matcher.substringMatchAsciiWithPrefilter(
+    haystack: ByteArray,
+    needle: ByteArray,
+    prefilterLen: Int,
+    prefilter: Sequence<Int>,
+): Pair<Int, Int> = substringMatchAsciiWithPrefilter(config, haystack, needle, prefilterLen, prefilter)
+
+internal fun Matcher.substringMatchAscii(
+    haystack: ByteArray,
+    needle: ByteArray,
+    indices: MutableList<Int>? = null,
+): Int? = substringMatchAscii(config, haystack, needle, indices)
+
+internal fun Matcher.substringMatch1NonAscii(
+    haystack: CharArray,
+    needle: Char,
+    start: Int,
+    indices: MutableList<Int>? = null,
+): Int = substringMatch1NonAscii(config, haystack, needle, start, indices)
+
+internal fun Matcher.substringMatchNonAscii(
+    haystack: CharArray,
+    needle: Utf32Str,
+    start: Int,
+    indices: MutableList<Int>? = null,
+): Int? = substringMatchNonAscii(config, haystack, needle, start, indices)

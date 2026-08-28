@@ -158,3 +158,22 @@ internal fun calculateScoreUnicode(
     }
     return score
 }
+
+internal fun Matcher.bonusFor(prevClass: io.github.kotlinmania.nucleo.chars.CharClass, clazz: io.github.kotlinmania.nucleo.chars.CharClass): Int =
+    config.bonusFor(prevClass, clazz)
+
+internal fun Matcher.calculateScore(
+    haystack: ByteArray,
+    needle: ByteArray,
+    start: Int,
+    end: Int,
+    indices: MutableList<Int>? = null,
+): Int = calculateScoreAscii(config, haystack, needle, start, end, indices)
+
+internal fun Matcher.calculateScore(
+    haystack: CharArray,
+    needle: CharArray,
+    start: Int,
+    end: Int,
+    indices: MutableList<Int>? = null,
+): Int = calculateScoreUnicode(config, haystack, needle, start, end, indices)

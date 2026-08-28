@@ -77,3 +77,19 @@ internal fun fuzzyMatchGreedyUnicode(
     }
     return calculateScoreUnicode(config, haystack, needle, actualStart, actualEnd, indices)
 }
+
+internal fun Matcher.fuzzyMatchGreedy_(
+    haystack: ByteArray,
+    needle: ByteArray,
+    start: Int,
+    end: Int,
+    indices: MutableList<Int>? = null,
+): Int? = fuzzyMatchGreedyAscii(config, haystack, needle, start, end, indices)
+
+internal fun Matcher.fuzzyMatchGreedy_(
+    haystack: CharArray,
+    needle: CharArray,
+    start: Int,
+    end: Int,
+    indices: MutableList<Int>? = null,
+): Int? = fuzzyMatchGreedyUnicode(config, haystack, needle, start, end, indices)
