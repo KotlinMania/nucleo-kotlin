@@ -1,4 +1,4 @@
-// port-lint: source worker.rs
+// port-lint: source nucleo/src/worker.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.pattern.MultiPattern

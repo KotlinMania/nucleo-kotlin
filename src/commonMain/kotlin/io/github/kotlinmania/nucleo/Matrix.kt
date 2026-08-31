@@ -1,4 +1,4 @@
-// port-lint: source matrix.rs
+// port-lint: source nucleo/matcher/src/matrix.rs
 package io.github.kotlinmania.nucleo
 
 public const val MAX_MATRIX_SIZE: Int = 100 * 1024

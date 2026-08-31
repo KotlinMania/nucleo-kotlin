@@ -1,4 +1,4 @@
-// port-lint: tests utf32_str/tests.rs
+// port-lint: tests nucleo/matcher/src/utf32_str/tests.rs
 package io.github.kotlinmania.nucleo
 
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-// port-lint: source pattern.rs
+// port-lint: source nucleo/src/pattern.rs
 package io.github.kotlinmania.nucleo.pattern
 
 import io.github.kotlinmania.nucleo.Matcher

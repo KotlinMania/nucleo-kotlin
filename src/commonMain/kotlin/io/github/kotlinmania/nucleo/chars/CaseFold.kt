@@ -1,4 +1,4 @@
-// port-lint: source chars/case_fold.rs
+// port-lint: source nucleo/matcher/src/chars/case_fold.rs
 package io.github.kotlinmania.nucleo.chars
 
 /**
