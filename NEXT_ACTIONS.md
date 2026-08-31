@@ -5,11 +5,11 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 19/26 (73.1%)
-- **Function parity:** 195/226 matched (target 312) — 86.3%
-- **Class/type parity:** 43/45 matched (target 59) — 95.6%
-- **Combined symbol parity:** 238/271 matched (target 371) — 87.8%
+- **Function parity:** 195/226 matched (target 313) — 86.3%
+- **Class/type parity:** 41/45 matched (target 57) — 91.1%
+- **Combined symbol parity:** 236/271 matched (target 370) — 87.1%
 - **Average inline-code cosine:** 0.63 (function body across 17 matched files)
-- **Average documentation cosine:** 0.29 (doc text across 17 matched files)
+- **Average documentation cosine:** 0.28 (doc text across 17 matched files)
 - **Cheat-zeroed Files:** 2
 - **Critical Issues:** 7 files with <0.60 function similarity
 
@@ -33,7 +33,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.72
 - **Dependents:** 4
 - **Priority Score:** 4000302.8
-- **Functions:** 2/2 matched (target 5)
+- **Functions:** 2/2 matched (target 6)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched
 - **Missing types:** _none_
@@ -43,13 +43,24 @@ Every matched file is listed below with function and type symbol parity.
 - **Target:** `nucleo.Utf32Str`
 - **Similarity:** 0.30
 - **Dependents:** 2
-- **Priority Score:** 2002207.0
+- **Priority Score:** 2012207.0
 - **Functions:** 18/18 matched (target 60)
 - **Missing functions:** _none_
-- **Types:** 4/4 matched (target 6)
-- **Missing types:** _none_
+- **Types:** 3/4 matched (target 5)
+- **Missing types:** `Item`
 
-### 3. chars.normalize
+### 3. matcher.chars
+
+- **Target:** `chars.Chars`
+- **Similarity:** 0.66
+- **Dependents:** 1
+- **Priority Score:** 1011303.4
+- **Functions:** 10/10 matched (target 17)
+- **Missing functions:** _none_
+- **Types:** 2/3 matched (target 2)
+- **Missing types:** `Char`
+
+### 4. chars.normalize
 
 - **Target:** `chars.Normalize`
 - **Similarity:** 0.84
@@ -61,7 +72,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 4/5 matched
 
-### 4. worker
+### 5. worker
 
 - **Target:** `nucleo.Worker`
 - **Similarity:** 0.75
@@ -70,17 +81,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Functions:** 12/12 matched (target 13)
 - **Missing functions:** _none_
 - **Types:** 2/2 matched
-- **Missing types:** _none_
-
-### 5. matcher.chars
-
-- **Target:** `chars.Chars`
-- **Similarity:** 0.66
-- **Dependents:** 1
-- **Priority Score:** 1001303.4
-- **Functions:** 10/10 matched (target 17)
-- **Missing functions:** _none_
-- **Types:** 3/3 matched
 - **Missing types:** _none_
 
 ### 6. matcher.debug

@@ -2,7 +2,7 @@
   "type": "port",
   "name": "nucleo-kotlin",
   "source": {
-    "path": "tmp/nucleo/src",
+    "path": "tmp/nucleo",
     "lang": "rust"
   },
   "target": {
