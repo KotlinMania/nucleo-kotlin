@@ -1,4 +1,4 @@
-// port-lint: source lib.rs
+// port-lint: source nucleo/src/lib.rs
 /**
  * High-level matcher API providing a background worker threadpool and lock-free item injection.
  *

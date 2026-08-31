@@ -1,4 +1,4 @@
-// port-lint: tests chars/normalize.rs
+// port-lint: tests nucleo/matcher/src/chars/normalize.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.normalize

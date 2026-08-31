@@ -1,4 +1,4 @@
-// port-lint: tests boxcar.rs
+// port-lint: tests nucleo/src/boxcar.rs
 package io.github.kotlinmania.nucleo
 
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-// port-lint: source config.rs
+// port-lint: source nucleo/matcher/src/config.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.CharClass
