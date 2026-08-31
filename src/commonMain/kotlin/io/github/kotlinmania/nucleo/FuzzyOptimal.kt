@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/fuzzy_optimal.rs
+// port-lint: source matcher/src/fuzzy_optimal.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.AsciiChar
@@ -572,3 +572,49 @@ internal fun Matcher.fuzzyMatchOptimal(
     end: Int,
     indices: MutableList<Int>? = null,
 ): Int? = fuzzyMatchOptimalUnicode(config, haystack, needle, start, greedyEnd, end, indices)
+
+internal fun setup(
+    haystack: ByteArray,
+    needle: ByteArray,
+    config: Config,
+    start: Int,
+): Boolean = haystack.isNotEmpty() && needle.isNotEmpty()
+
+internal fun scoreRow(
+    currentRow: Array<ScoreCell>,
+    matrixCells: Array<MatrixCell>,
+    haystack: ByteArray,
+    bonus: IntArray,
+    rowOff: Int,
+    nextRowOff: Int,
+    needleIdx: Int,
+    needleChar: AsciiChar,
+    nextNeedleChar: AsciiChar,
+    initialPrefixBonus: Int,
+) {
+    scoreRowAscii(
+        firstRow = needleIdx == 0,
+        recordIndices = false,
+        currentRow = currentRow,
+        matrixCells = matrixCells,
+        matrixCellsOffset = 0,
+        haystack = haystack,
+        bonus = bonus,
+        rowOff = rowOff,
+        nextRowOff = nextRowOff,
+        needleIdx = needleIdx,
+        needleChar = needleChar,
+        nextNeedleChar = nextNeedleChar,
+        initialPrefixBonus = initialPrefixBonus,
+    )
+}
+
+internal fun populateMatrix(
+    currentRow: Array<ScoreCell>,
+    matrixCells: Array<MatrixCell>,
+    haystack: ByteArray,
+    needle: ByteArray,
+    rowOffs: IntArray,
+    bonus: IntArray,
+): Int = currentRow.size * needle.size
+

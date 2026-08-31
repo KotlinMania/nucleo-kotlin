@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/utf32_str.rs
+// port-lint: source matcher/src/utf32_str.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.graphemes
@@ -39,7 +39,9 @@ public sealed class Utf32Str : Comparable<Utf32Str> {
 
     public abstract fun first(): Char
 
-    public abstract fun chars(): Sequence<Char>
+    public abstract fun chars(): Chars
+
+    public fun fmt(): String = toString()
 
     public abstract fun slice(startIndex: Int = 0, endIndex: Int = length): Utf32Str
 
@@ -74,12 +76,7 @@ public sealed class Utf32Str : Comparable<Utf32Str> {
             return (bytes[offset].toInt() and 0xFF).toChar()
         }
 
-        override fun chars(): Sequence<Char> =
-            sequence {
-                for (i in 0 until size) {
-                    yield((bytes[offset + i].toInt() and 0xFF).toChar())
-                }
-            }
+        override fun chars(): Chars = Chars.Ascii(bytes, offset, size)
 
         override fun slice(startIndex: Int, endIndex: Int): Utf32Str {
             val s = startIndex.coerceAtLeast(0)
@@ -160,12 +157,7 @@ public sealed class Utf32Str : Comparable<Utf32Str> {
             return codepoints[offset]
         }
 
-        override fun chars(): Sequence<Char> =
-            sequence {
-                for (i in 0 until size) {
-                    yield(codepoints[offset + i])
-                }
-            }
+        override fun chars(): Chars = Chars.Unicode(codepoints, offset, size)
 
         override fun slice(startIndex: Int, endIndex: Int): Utf32Str {
             val s = startIndex.coerceAtLeast(0)
@@ -246,6 +238,79 @@ public sealed class Utf32Str : Comparable<Utf32Str> {
 }
 
 /**
+ * An iterator over the characters in a [Utf32Str].
+ */
+public sealed class Chars : Iterator<Char>, Iterable<Char> {
+    override fun iterator(): Iterator<Char> = this
+
+    public abstract fun nextOrNull(): Char?
+
+    public abstract fun nextBack(): Char?
+
+    public class Ascii(
+        private val bytes: ByteArray,
+        private val offset: Int,
+        private val size: Int,
+    ) : Chars() {
+        private var head = 0
+        private var tail = size
+
+        override fun hasNext(): Boolean = head < tail
+
+        override fun next(): Char {
+            if (!hasNext()) throw NoSuchElementException()
+            val c = (bytes[offset + head].toInt() and 0xFF).toChar()
+            head++
+            return c
+        }
+
+        override fun nextOrNull(): Char? {
+            if (!hasNext()) return null
+            val c = (bytes[offset + head].toInt() and 0xFF).toChar()
+            head++
+            return c
+        }
+
+        override fun nextBack(): Char? {
+            if (head >= tail) return null
+            tail--
+            return (bytes[offset + tail].toInt() and 0xFF).toChar()
+        }
+    }
+
+    public class Unicode(
+        private val codepoints: CharArray,
+        private val offset: Int,
+        private val size: Int,
+    ) : Chars() {
+        private var head = 0
+        private var tail = size
+
+        override fun hasNext(): Boolean = head < tail
+
+        override fun next(): Char {
+            if (!hasNext()) throw NoSuchElementException()
+            val c = codepoints[offset + head]
+            head++
+            return c
+        }
+
+        override fun nextOrNull(): Char? {
+            if (!hasNext()) return null
+            val c = codepoints[offset + head]
+            head++
+            return c
+        }
+
+        override fun nextBack(): Char? {
+            if (head >= tail) return null
+            tail--
+            return codepoints[offset + tail]
+        }
+    }
+}
+
+/**
  * An owned version of [Utf32Str].
  */
 public sealed class Utf32String : Comparable<Utf32String> {
@@ -254,6 +319,8 @@ public sealed class Utf32String : Comparable<Utf32String> {
     public fun len(): Int = length
 
     public fun isEmpty(): Boolean = length == 0
+
+    public fun fmt(): String = toString()
 
     public abstract fun slice(startIndex: Int = 0, endIndex: Int = length): Utf32Str
 
@@ -312,6 +379,8 @@ public sealed class Utf32String : Comparable<Utf32String> {
 
     public companion object {
         public fun empty(): Utf32String = Ascii("")
+
+        public fun default(): Utf32String = empty()
 
         public fun fromAscii(value: String): Utf32String = Ascii(value)
 

@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/chars.rs
+// port-lint: source matcher/src/chars.rs
 package io.github.kotlinmania.nucleo.chars
 
 import io.github.kotlinmania.nucleo.Config
@@ -31,7 +31,13 @@ public value class AsciiChar(
 
     override fun compareTo(other: AsciiChar): Int = (byte.toInt() and 0xFF).compareTo(other.byte.toInt() and 0xFF)
 
-    override fun toString(): String = toChar.toString()
+    public fun fmt(): String = toChar.toString()
+
+    public fun eq(other: Char): Boolean = toChar == other
+
+    public fun eq(other: AsciiChar): Boolean = byte == other.byte
+
+    override fun toString(): String = fmt()
 
     public fun charClass(config: Config): CharClass {
         val c = byte.toInt() and 0xFF

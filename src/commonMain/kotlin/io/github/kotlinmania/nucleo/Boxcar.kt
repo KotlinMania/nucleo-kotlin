@@ -1,4 +1,4 @@
-// port-lint: source nucleo/src/boxcar.rs
+// port-lint: source src/boxcar.rs
 /**
  * A lock-free, append-only vector for storing matcher candidate items across fixed-capacity buckets.
  */

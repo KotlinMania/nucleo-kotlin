@@ -1,4 +1,4 @@
-// port-lint: tests nucleo/matcher/src/pattern/tests.rs
+// port-lint: tests matcher/src/pattern/tests.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.pattern.Atom

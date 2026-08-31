@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/lib.rs
+// port-lint: source matcher/src/lib.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.AsciiChar
@@ -10,6 +10,32 @@ import io.github.kotlinmania.nucleo.chars.normalize
 public class Matcher(
     public var config: Config = Config.DEFAULT,
 ) {
+    internal val slab: MatrixSlab = MatrixSlab.new()
+
+    /**
+     * Creates a copy of this matcher.
+     */
+    public fun clone(): Matcher = Matcher(config.clone())
+
+    /**
+     * Formats the matcher into a debug string.
+     */
+    public fun fmt(): String = "Matcher { config: $config }"
+
+    override fun toString(): String = fmt()
+
+    public companion object {
+        /**
+         * Creates a new matcher instance with the given configuration.
+         */
+        public fun new(config: Config = Config.DEFAULT): Matcher = Matcher(config)
+
+        /**
+         * Creates a default matcher instance.
+         */
+        public fun default(): Matcher = Matcher(Config.DEFAULT)
+    }
+
     /**
      * Find the fuzzy match with the highest score in the haystack.
      */
