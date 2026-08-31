@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/prefilter.rs
+// port-lint: source matcher/src/prefilter.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.normalize

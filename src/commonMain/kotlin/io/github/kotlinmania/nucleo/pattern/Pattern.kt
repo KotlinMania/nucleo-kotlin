@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/pattern.rs
+// port-lint: source matcher/src/pattern.rs
 package io.github.kotlinmania.nucleo.pattern
 
 import io.github.kotlinmania.nucleo.Matcher
@@ -346,6 +346,19 @@ public class Pattern(
      * The individual pattern atoms in this pattern.
      */
     public val atoms: List<Atom> get() = _atoms
+
+    /**
+     * Creates a deep copy of this pattern.
+     */
+    public fun clone(): Pattern = Pattern(_atoms.map { it.copy() })
+
+    /**
+     * Clones data from another pattern into this one.
+     */
+    public fun cloneFrom(other: Pattern) {
+        _atoms.clear()
+        _atoms.addAll(other._atoms.map { it.copy() })
+    }
 
     /**
      * Matches this pattern against `haystack` and calculates a ranking score.

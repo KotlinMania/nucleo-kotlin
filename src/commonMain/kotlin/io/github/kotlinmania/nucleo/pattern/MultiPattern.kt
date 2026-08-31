@@ -1,4 +1,4 @@
-// port-lint: source nucleo/src/pattern.rs
+// port-lint: source src/pattern.rs
 package io.github.kotlinmania.nucleo.pattern
 
 import io.github.kotlinmania.nucleo.Matcher
@@ -118,4 +118,11 @@ public class MultiPattern(
      * Checks whether all column patterns are empty.
      */
     public fun isEmpty(): Boolean = cols.all { it.first.atoms.isEmpty() }
+
+    public companion object {
+        /**
+         * Creates a new [MultiPattern] for the given number of columns.
+         */
+        public fun new(columns: Int): MultiPattern = MultiPattern(columns)
+    }
 }

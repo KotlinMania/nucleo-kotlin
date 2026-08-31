@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/exact.rs
+// port-lint: source matcher/src/exact.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.AsciiChar

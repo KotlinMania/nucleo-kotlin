@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/config.rs
+// port-lint: source matcher/src/config.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.CharClass
@@ -15,6 +15,11 @@ public data class Config(
     public var ignoreCase: Boolean = true,
     public var preferPrefix: Boolean = false,
 ) {
+    /**
+     * Returns a copy of this configuration.
+     */
+    public fun clone(): Config = copy(delimiterChars = delimiterChars.copyOf())
+
     /**
      * Configures the matcher with bonuses appropriate for matching file paths.
      */

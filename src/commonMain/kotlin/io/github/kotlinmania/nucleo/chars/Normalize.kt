@@ -1,4 +1,4 @@
-// port-lint: source nucleo/matcher/src/chars/normalize.rs
+// port-lint: source matcher/src/chars/normalize.rs
 package io.github.kotlinmania.nucleo.chars
 
 /**
@@ -47,6 +47,13 @@ public fun normalize(c: Int): Int {
         return normalize(c.toChar()).code
     }
     return c
+}
+
+internal fun checkConversions(pairs: List<Pair<Char, Char>>): Boolean {
+    for ((original, expected) in pairs) {
+        if (normalize(original) != expected) return false
+    }
+    return true
 }
 
 private val LATIN_1AB: CharArray =

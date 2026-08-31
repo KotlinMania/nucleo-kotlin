@@ -1,4 +1,4 @@
-// port-lint: source nucleo/src/par_sort.rs
+// port-lint: source src/par_sort.rs
 /**
  * Parallel quicksort based on pattern-defeating quicksort with cancellation support.
  */
