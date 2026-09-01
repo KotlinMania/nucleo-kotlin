@@ -1,4 +1,4 @@
-// port-lint: tests src/tests.rs
+// port-lint: tests tests.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.pattern.CaseMatching

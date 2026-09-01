@@ -240,7 +240,9 @@ public sealed class Utf32Str : Comparable<Utf32Str> {
 /**
  * An iterator over the characters in a [Utf32Str].
  */
-public sealed class Chars : Iterator<Char>, Iterable<Char> {
+public sealed class Chars :
+    Iterator<Char>,
+    Iterable<Char> {
     override fun iterator(): Iterator<Char> = this
 
     public abstract fun nextOrNull(): Char?
