@@ -617,4 +617,3 @@ internal fun populateMatrix(
     rowOffs: IntArray,
     bonus: IntArray,
 ): Int = currentRow.size * needle.size
-
