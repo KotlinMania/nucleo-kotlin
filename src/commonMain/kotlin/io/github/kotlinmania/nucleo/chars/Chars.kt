@@ -225,3 +225,9 @@ public fun graphemes(text: String): Sequence<Char> =
             }
         }
     }
+
+/**
+ * Type alias matching upstream `Char` trait representation in Kotlin.
+ */
+public typealias Char = kotlin.Char
+
