@@ -17,12 +17,23 @@ public enum class CharClass {
 }
 
 /**
+ * Trait for character classification and normalization operations matching upstream `Char` trait.
+ */
+public interface CharTrait<Self> {
+    public val isAscii: Boolean
+    public fun charClass(config: Config): CharClass
+    public fun charClassAndNormalize(config: Config): Pair<Self, CharClass>
+    public fun normalize(config: Config): Self
+}
+
+/**
  * Wrapper around an ASCII byte value with character classification and normalization methods.
  */
 @kotlin.jvm.JvmInline
 public value class AsciiChar(
     public val byte: Byte,
-) : Comparable<AsciiChar> {
+) : Comparable<AsciiChar>, CharTrait<AsciiChar> {
+    override val isAscii: Boolean get() = true
     public constructor(char: Char) : this(char.code.toByte())
     public constructor(code: Int) : this(code.toByte())
 
@@ -39,7 +50,7 @@ public value class AsciiChar(
 
     override fun toString(): String = fmt()
 
-    public fun charClass(config: Config): CharClass {
+    override fun charClass(config: Config): CharClass {
         val c = byte.toInt() and 0xFF
         return if (c in 0x61..0x7A) {
             CharClass.Lower
@@ -56,7 +67,7 @@ public value class AsciiChar(
         }
     }
 
-    public fun charClassAndNormalize(config: Config): Pair<AsciiChar, CharClass> {
+    override fun charClassAndNormalize(config: Config): Pair<AsciiChar, CharClass> {
         val clazz = charClass(config)
         val normalized =
             if (config.ignoreCase && clazz == CharClass.Upper) {
@@ -67,7 +78,7 @@ public value class AsciiChar(
         return Pair(normalized, clazz)
     }
 
-    public fun normalize(config: Config): AsciiChar {
+    override fun normalize(config: Config): AsciiChar {
         val c = byte.toInt() and 0xFF
         return if (config.ignoreCase && c in 0x41..0x5A) {
             AsciiChar((byte + 32).toByte())
