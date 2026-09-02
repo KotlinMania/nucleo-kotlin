@@ -8,9 +8,9 @@ Based on AST analysis, here are the concrete next steps.
 - **Function parity:** 195/226 matched (target 313) — 86.3%
 - **Class/type parity:** 42/45 matched (target 59) — 93.3%
 - **Combined symbol parity:** 237/271 matched (target 372) — 87.5%
-- **Average inline-code cosine:** 0.63 (function body across 17 matched files)
-- **Average documentation cosine:** 0.28 (doc text across 17 matched files)
-- **Cheat-zeroed Files:** 2
+- **Average inline-code cosine:** 0.63 (function body across 18 matched files)
+- **Average documentation cosine:** 0.32 (doc text across 18 matched files)
+- **Cheat-zeroed Files:** 1
 - **Critical Issues:** 7 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
@@ -63,7 +63,7 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 4. worker
 
-- **Target:** `nucleo.Worker`
+- **Target:** `nucleo.Worker [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.75
 - **Dependents:** 1
 - **Priority Score:** 1001402.5
@@ -71,6 +71,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 2/2 matched
 - **Missing types:** _none_
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `worker.rs` vs expected `worker.rs`
+- **Proposed provenance header:** `// port-lint: source worker.rs` (current: `// port-lint: source worker.rs`)
+- **Lint issues:** 1
 
 ### 5. matcher.chars
 
@@ -96,7 +99,7 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 7. boxcar
 
-- **Target:** `nucleo.Boxcar`
+- **Target:** `nucleo.Boxcar [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.63
 - **Dependents:** 0
 - **Priority Score:** 4903.7
@@ -105,17 +108,25 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 11/11 matched (target 15)
 - **Missing types:** _none_
 - **Tests:** 6/6 matched
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `boxcar.rs` vs expected `boxcar.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:boxcar.rs` vs expected `boxcar.rs`
+- **Proposed provenance header:** `// port-lint: source boxcar.rs` (current: `// port-lint: source boxcar.rs`)
+- **Proposed provenance header:** `// port-lint: tests boxcar.rs` (current: `// port-lint: tests boxcar.rs`)
+- **Lint issues:** 2
 
 ### 8. lib
 
-- **Target:** `nucleo.Nucleo [STUB]`
-- **Similarity:** 0.00
+- **Target:** `nucleo.Nucleo [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.56
 - **Dependents:** 0
-- **Priority Score:** 3710.0
+- **Priority Score:** 3704.4
 - **Functions:** 30/30 matched (target 37)
 - **Missing functions:** _none_
 - **Types:** 7/7 matched (target 8)
 - **Missing types:** _none_
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `lib.rs` vs expected `lib.rs`
+- **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source lib.rs`)
+- **Lint issues:** 2
 
 ### 9. matcher.lib
 
@@ -141,7 +152,7 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 11. par_sort
 
-- **Target:** `nucleo.ParSort`
+- **Target:** `nucleo.ParSort [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.66
 - **Dependents:** 0
 - **Priority Score:** 1503.4
@@ -149,6 +160,11 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 7)
 - **Missing types:** _none_
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `par_sort.rs` vs expected `par_sort.rs`
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:par_sort.rs` vs expected `par_sort.rs`
+- **Proposed provenance header:** `// port-lint: source par_sort.rs` (current: `// port-lint: source par_sort.rs`)
+- **Proposed provenance header:** `// port-lint: tests par_sort.rs` (current: `// port-lint: tests par_sort.rs`)
+- **Lint issues:** 2
 
 ### 12. matcher.matrix
 
@@ -163,7 +179,7 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 13. pattern
 
-- **Target:** `pattern.MultiPattern`
+- **Target:** `pattern.MultiPattern [PROVENANCE-FALLBACK]`
 - **Similarity:** 0.69
 - **Dependents:** 0
 - **Priority Score:** 1103.1
@@ -171,6 +187,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 2/2 matched
 - **Missing types:** _none_
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `pattern.rs` vs expected `pattern.rs`
+- **Proposed provenance header:** `// port-lint: source pattern.rs` (current: `// port-lint: source pattern.rs`)
+- **Lint issues:** 1
 
 ### 14. matcher.fuzzy_optimal
 

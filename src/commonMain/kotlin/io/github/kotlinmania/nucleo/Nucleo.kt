@@ -1,4 +1,4 @@
-// port-lint: source src/lib.rs
+// port-lint: source lib.rs
 /**
  * High-level matcher API providing a background worker threadpool and lock-free item injection.
  *
@@ -440,9 +440,6 @@ public class Nucleo<T>(
         canceled: Boolean,
         status: PatternStatus,
     ): Status {
-        if (timeout > 0uL) {
-            // synchronous tick timeout placeholder
-        }
         val hasNewItems = items.size.toUInt() > lastSnapshotCount
         val patternChanged = canceled || status != PatternStatus.Unchanged
 

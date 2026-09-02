@@ -1,4 +1,4 @@
-// port-lint: tests src/par_sort.rs
+// port-lint: tests par_sort.rs
 package io.github.kotlinmania.nucleo
 
 import kotlin.concurrent.atomics.AtomicBoolean
