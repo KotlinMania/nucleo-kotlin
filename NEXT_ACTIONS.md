@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 14/17 (82.4%)
-- **Function parity:** 92/118 matched (target 228) — 78.0%
-- **Class/type parity:** 18/21 matched (target 34) — 85.7%
-- **Combined symbol parity:** 110/139 matched (target 262) — 79.1%
-- **Average inline-code cosine:** 0.61 (function body across 13 matched files)
-- **Average documentation cosine:** 0.22 (doc text across 13 matched files)
-- **Cheat-zeroed Files:** 1
-- **Critical Issues:** 6 files with <0.60 function similarity
+- **Files Present:** 19/26 (73.1%)
+- **Function parity:** 195/226 matched (target 313) — 86.3%
+- **Class/type parity:** 42/45 matched (target 59) — 93.3%
+- **Combined symbol parity:** 237/271 matched (target 372) — 87.5%
+- **Average inline-code cosine:** 0.63 (function body across 17 matched files)
+- **Average documentation cosine:** 0.28 (doc text across 17 matched files)
+- **Cheat-zeroed Files:** 2
+- **Critical Issues:** 7 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -27,9 +27,20 @@ No missing high-value files detected.
 
 Every matched file is listed below with function and type symbol parity.
 
-### 1. utf32_str
+### 1. matcher.config
 
-- **Target:** `nucleo.Utf32Str [PROVENANCE-FALLBACK]`
+- **Target:** `nucleo.Config`
+- **Similarity:** 0.72
+- **Dependents:** 4
+- **Priority Score:** 4000302.8
+- **Functions:** 2/2 matched (target 6)
+- **Missing functions:** _none_
+- **Types:** 1/1 matched
+- **Missing types:** _none_
+
+### 2. matcher.utf32_str
+
+- **Target:** `nucleo.Utf32Str`
 - **Similarity:** 0.30
 - **Dependents:** 2
 - **Priority Score:** 2012207.0
@@ -37,41 +48,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 3/4 matched (target 5)
 - **Missing types:** `Item`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/utf32_str.rs` vs expected `utf32_str.rs`
-- **Proposed provenance header:** `// port-lint: source utf32_str.rs` (current: `// port-lint: source matcher/src/utf32_str.rs`)
-- **Lint issues:** 1
 
-### 2. config
+### 3. chars.normalize
 
-- **Target:** `nucleo.Config [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.72
-- **Dependents:** 2
-- **Priority Score:** 2000302.9
-- **Functions:** 2/2 matched (target 6)
-- **Missing functions:** _none_
-- **Types:** 1/1 matched
-- **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/config.rs` vs expected `config.rs`
-- **Proposed provenance header:** `// port-lint: source config.rs` (current: `// port-lint: source matcher/src/config.rs`)
-- **Lint issues:** 1
-
-### 3. chars
-
-- **Target:** `chars.Chars [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.66
-- **Dependents:** 1
-- **Priority Score:** 1011303.4
-- **Functions:** 10/10 matched (target 17)
-- **Missing functions:** _none_
-- **Types:** 2/3 matched
-- **Missing types:** `Char`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/chars.rs` vs expected `chars.rs`
-- **Proposed provenance header:** `// port-lint: source chars.rs` (current: `// port-lint: source matcher/src/chars.rs`)
-- **Lint issues:** 1
-
-### 4. chars.normalize
-
-- **Target:** `chars.Normalize [PROVENANCE-FALLBACK]`
+- **Target:** `chars.Normalize`
 - **Similarity:** 0.84
 - **Dependents:** 1
 - **Priority Score:** 1010601.6
@@ -80,47 +60,99 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 - **Tests:** 4/5 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/chars/normalize.rs` vs expected `chars/normalize.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:matcher/src/chars/normalize.rs` vs expected `chars/normalize.rs`
-- **Proposed provenance header:** `// port-lint: source chars/normalize.rs` (current: `// port-lint: source matcher/src/chars/normalize.rs`)
-- **Proposed provenance header:** `// port-lint: tests chars/normalize.rs` (current: `// port-lint: tests matcher/src/chars/normalize.rs`)
-- **Lint issues:** 2
 
-### 5. lib
+### 4. worker
 
-- **Target:** `nucleo.Nucleo [STUB] [PROVENANCE-FALLBACK]`
+- **Target:** `nucleo.Worker`
+- **Similarity:** 0.75
+- **Dependents:** 1
+- **Priority Score:** 1001402.5
+- **Functions:** 12/12 matched (target 13)
+- **Missing functions:** _none_
+- **Types:** 2/2 matched
+- **Missing types:** _none_
+
+### 5. matcher.chars
+
+- **Target:** `chars.Chars`
+- **Similarity:** 0.66
+- **Dependents:** 1
+- **Priority Score:** 1001303.4
+- **Functions:** 10/10 matched (target 17)
+- **Missing functions:** _none_
+- **Types:** 3/3 matched (target 4)
+- **Missing types:** _none_
+
+### 6. matcher.debug
+
+- **Target:** `nucleo.Debug`
+- **Similarity:** 0.19
+- **Dependents:** 1
+- **Priority Score:** 1000108.1
+- **Functions:** 1/1 matched (target 4)
+- **Missing functions:** _none_
+- **Types:** 0/0 matched
+- **Missing types:** _none_
+
+### 7. boxcar
+
+- **Target:** `nucleo.Boxcar`
+- **Similarity:** 0.63
+- **Dependents:** 0
+- **Priority Score:** 4903.7
+- **Functions:** 38/38 matched (target 49)
+- **Missing functions:** _none_
+- **Types:** 11/11 matched (target 15)
+- **Missing types:** _none_
+- **Tests:** 6/6 matched
+
+### 8. lib
+
+- **Target:** `nucleo.Nucleo [STUB]`
+- **Similarity:** 0.00
+- **Dependents:** 0
+- **Priority Score:** 3710.0
+- **Functions:** 30/30 matched (target 37)
+- **Missing functions:** _none_
+- **Types:** 7/7 matched (target 8)
+- **Missing types:** _none_
+
+### 9. matcher.lib
+
+- **Target:** `nucleo.Matcher [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
 - **Priority Score:** 2110.0
-- **Functions:** 20/20 matched (target 58)
+- **Functions:** 20/20 matched (target 21)
 - **Missing functions:** _none_
-- **Types:** 1/1 matched (target 9)
+- **Types:** 1/1 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/lib.rs` vs expected `lib.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/lib.rs` vs expected `lib.rs`
-- **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source src/lib.rs`)
-- **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source matcher/src/lib.rs`)
-- **Lint issues:** 2
 
-### 6. pattern
+### 10. matcher.pattern
 
-- **Target:** `pattern.Pattern [PROVENANCE-FALLBACK]`
+- **Target:** `pattern.Pattern`
 - **Similarity:** 0.76
 - **Dependents:** 0
 - **Priority Score:** 1602.4
-- **Functions:** 11/11 matched (target 28)
+- **Functions:** 11/11 matched (target 18)
 - **Missing functions:** _none_
-- **Types:** 5/5 matched (target 7)
+- **Types:** 5/5 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/pattern.rs` vs expected `pattern.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/pattern.rs` vs expected `pattern.rs`
-- **Proposed provenance header:** `// port-lint: source pattern.rs` (current: `// port-lint: source matcher/src/pattern.rs`)
-- **Proposed provenance header:** `// port-lint: source pattern.rs` (current: `// port-lint: source src/pattern.rs`)
-- **Lint issues:** 2
 
-### 7. matrix
+### 11. par_sort
 
-- **Target:** `nucleo.Matrix [PROVENANCE-FALLBACK]`
+- **Target:** `nucleo.ParSort`
+- **Similarity:** 0.66
+- **Dependents:** 0
+- **Priority Score:** 1503.4
+- **Functions:** 14/14 matched (target 23)
+- **Missing functions:** _none_
+- **Types:** 1/1 matched (target 7)
+- **Missing types:** _none_
+
+### 12. matcher.matrix
+
+- **Target:** `nucleo.Matrix`
 - **Similarity:** 0.45
 - **Dependents:** 0
 - **Priority Score:** 1205.5
@@ -128,13 +160,21 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 6/6 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/matrix.rs` vs expected `matrix.rs`
-- **Proposed provenance header:** `// port-lint: source matrix.rs` (current: `// port-lint: source matcher/src/matrix.rs`)
-- **Lint issues:** 1
 
-### 8. fuzzy_optimal
+### 13. pattern
 
-- **Target:** `nucleo.FuzzyOptimal [PROVENANCE-FALLBACK]`
+- **Target:** `pattern.MultiPattern`
+- **Similarity:** 0.69
+- **Dependents:** 0
+- **Priority Score:** 1103.1
+- **Functions:** 9/9 matched (target 10)
+- **Missing functions:** _none_
+- **Types:** 2/2 matched
+- **Missing types:** _none_
+
+### 14. matcher.fuzzy_optimal
+
+- **Target:** `nucleo.FuzzyOptimal`
 - **Similarity:** 0.64
 - **Dependents:** 0
 - **Priority Score:** 703.6
@@ -142,13 +182,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/fuzzy_optimal.rs` vs expected `fuzzy_optimal.rs`
-- **Proposed provenance header:** `// port-lint: source fuzzy_optimal.rs` (current: `// port-lint: source matcher/src/fuzzy_optimal.rs`)
-- **Lint issues:** 1
 
-### 9. exact
+### 15. matcher.exact
 
-- **Target:** `nucleo.Exact [PROVENANCE-FALLBACK]`
+- **Target:** `nucleo.Exact`
 - **Similarity:** 0.85
 - **Dependents:** 0
 - **Priority Score:** 501.5
@@ -156,13 +193,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/exact.rs` vs expected `exact.rs`
-- **Proposed provenance header:** `// port-lint: source exact.rs` (current: `// port-lint: source matcher/src/exact.rs`)
-- **Lint issues:** 1
 
-### 10. prefilter
+### 16. matcher.prefilter
 
-- **Target:** `nucleo.Prefilter [PROVENANCE-FALLBACK]`
+- **Target:** `nucleo.Prefilter`
 - **Similarity:** 0.73
 - **Dependents:** 0
 - **Priority Score:** 402.7
@@ -170,13 +204,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched (target 2)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/prefilter.rs` vs expected `prefilter.rs`
-- **Proposed provenance header:** `// port-lint: source prefilter.rs` (current: `// port-lint: source matcher/src/prefilter.rs`)
-- **Lint issues:** 1
 
-### 11. score
+### 17. matcher.score
 
-- **Target:** `nucleo.Score [PROVENANCE-FALLBACK]`
+- **Target:** `nucleo.Score`
 - **Similarity:** 0.31
 - **Dependents:** 0
 - **Priority Score:** 206.9
@@ -184,27 +215,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/score.rs` vs expected `score.rs`
-- **Proposed provenance header:** `// port-lint: source score.rs` (current: `// port-lint: source matcher/src/score.rs`)
-- **Lint issues:** 1
 
-### 12. debug
+### 18. matcher.fuzzy_greedy
 
-- **Target:** `nucleo.Debug [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.19
-- **Dependents:** 0
-- **Priority Score:** 108.1
-- **Functions:** 1/1 matched (target 4)
-- **Missing functions:** _none_
-- **Types:** 0/0 matched
-- **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/debug.rs` vs expected `debug.rs`
-- **Proposed provenance header:** `// port-lint: source debug.rs` (current: `// port-lint: source matcher/src/debug.rs`)
-- **Lint issues:** 1
-
-### 13. fuzzy_greedy
-
-- **Target:** `nucleo.FuzzyGreedy [PROVENANCE-FALLBACK]`
+- **Target:** `nucleo.FuzzyGreedy`
 - **Similarity:** 0.53
 - **Dependents:** 0
 - **Priority Score:** 104.7
@@ -212,13 +226,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/fuzzy_greedy.rs` vs expected `fuzzy_greedy.rs`
-- **Proposed provenance header:** `// port-lint: source fuzzy_greedy.rs` (current: `// port-lint: source matcher/src/fuzzy_greedy.rs`)
-- **Lint issues:** 1
 
-### 14. chars.case_fold
+### 19. chars.case_fold
 
-- **Target:** `chars.CaseFold [PROVENANCE-FALLBACK]`
+- **Target:** `chars.CaseFold`
 - **Similarity:** 1.00
 - **Dependents:** 0
 - **Priority Score:** 0.0
@@ -226,9 +237,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 0/0 matched
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `matcher/src/chars/case_fold.rs` vs expected `chars/case_fold.rs`
-- **Proposed provenance header:** `// port-lint: source chars/case_fold.rs` (current: `// port-lint: source matcher/src/chars/case_fold.rs`)
-- **Lint issues:** 1
 
 ## Success Criteria
 

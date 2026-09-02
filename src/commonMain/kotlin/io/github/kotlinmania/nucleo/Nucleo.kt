@@ -435,11 +435,16 @@ public class Nucleo<T>(
         return res
     }
 
-    private fun tickInner(timeout: ULong, canceled: Boolean, status: PatternStatus): Status {
-        timeout.hashCode()
-        status.hashCode()
+    private fun tickInner(
+        timeout: ULong,
+        canceled: Boolean,
+        status: PatternStatus,
+    ): Status {
+        if (timeout > 0uL) {
+            // synchronous tick timeout placeholder
+        }
         val hasNewItems = items.size.toUInt() > lastSnapshotCount
-        val patternChanged = canceled
+        val patternChanged = canceled || status != PatternStatus.Unchanged
 
         if (!hasNewItems && !patternChanged) {
             return Status(changed = false, running = false)

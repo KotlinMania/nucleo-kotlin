@@ -394,3 +394,4 @@ public sealed class Utf32String : Comparable<Utf32String> {
             }
     }
 }
+
