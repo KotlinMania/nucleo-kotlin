@@ -21,8 +21,11 @@ public enum class CharClass {
  */
 public interface CharTrait<Self> {
     public val isAscii: Boolean
+
     public fun charClass(config: Config): CharClass
+
     public fun charClassAndNormalize(config: Config): Pair<Self, CharClass>
+
     public fun normalize(config: Config): Self
 }
 
@@ -32,7 +35,8 @@ public interface CharTrait<Self> {
 @kotlin.jvm.JvmInline
 public value class AsciiChar(
     public val byte: Byte,
-) : Comparable<AsciiChar>, CharTrait<AsciiChar> {
+) : Comparable<AsciiChar>,
+    CharTrait<AsciiChar> {
     override val isAscii: Boolean get() = true
     public constructor(char: Char) : this(char.code.toByte())
     public constructor(code: Int) : this(code.toByte())
@@ -230,4 +234,3 @@ public fun graphemes(text: String): Sequence<Char> =
  * Type alias matching upstream `Char` trait representation in Kotlin.
  */
 public typealias Char = kotlin.Char
-
