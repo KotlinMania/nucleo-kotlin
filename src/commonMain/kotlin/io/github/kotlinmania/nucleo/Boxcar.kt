@@ -68,7 +68,7 @@ internal class Iter<T>(
     /**
      * Associated type marker for `Iterator::Item` on [Iter].
      */
-    public interface Item
+    interface Item
 
     fun end(): UInt = end
 
@@ -160,10 +160,10 @@ internal class Entry<T>(
         fun layout(cols: UInt): Int = 1 + cols.toInt()
 
         fun <T> matcherColsRaw(entry: Entry<T>, cols: UInt): List<Utf32String> =
-            entry.item?.matcherColumns ?: emptyList()
+            entry.item?.matcherColumns.orEmpty()
 
         fun <T> matcherColsMut(entry: Entry<T>, cols: UInt): List<Utf32String> =
-            entry.item?.matcherColumns ?: emptyList()
+            entry.item?.matcherColumns.orEmpty()
 
         fun <T> read(entry: Entry<T>, cols: UInt): Item<T>? = entry.item
     }

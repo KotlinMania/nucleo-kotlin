@@ -104,7 +104,7 @@ internal fun fuzzyMatchOptimalAscii(
     val totalMatrixCells = currentRowWidth * needle.size
     val matrixCells = Array(totalMatrixCells) { MatrixCell() }
 
-    var prefixBonus =
+    val prefixBonus =
         if (config.preferPrefix) {
             if (start == 0) {
                 MAX_PREFIX_BONUS * PREFIX_BONUS_SCALE
@@ -328,7 +328,7 @@ internal fun fuzzyMatchOptimalUnicode(
     val totalMatrixCells = currentRowWidth * needle.size
     val matrixCells = Array(totalMatrixCells) { MatrixCell() }
 
-    var prefixBonus =
+    val prefixBonus =
         if (config.preferPrefix) {
             if (start == 0) {
                 MAX_PREFIX_BONUS * PREFIX_BONUS_SCALE
