@@ -54,10 +54,9 @@ public data class Config(
                 else -> {}
             }
         }
-        return if (prevClass == CharClass.Lower &&
-            clazz == CharClass.Upper ||
-            prevClass != CharClass.Number &&
-            clazz == CharClass.Number
+        return if (
+            (prevClass == CharClass.Lower && clazz == CharClass.Upper) ||
+            (prevClass != CharClass.Number && clazz == CharClass.Number)
         ) {
             BONUS_CAMEL123
         } else if (clazz == CharClass.Whitespace) {

@@ -303,7 +303,7 @@ public class Nucleo<T>(
     private var sortResultsFlag: Boolean = true
     private var reverseItemsFlag: Boolean = false
     private var lastSnapshotCount: UInt = 0u
-    private var matcher: Matcher = Matcher(config)
+    private val matcher: Matcher = Matcher(config)
     private var state: State = State.Init
 
     /**
