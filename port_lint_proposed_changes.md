@@ -1,6 +1,6 @@
 # port-lint Proposed Changes
 
-**Generated:** 2026-10-11
+**Generated:** 2026-10-18
 **Source:** tmp/nucleo
 **Target:** src/commonMain/kotlin/io/github/kotlinmania/nucleo
 

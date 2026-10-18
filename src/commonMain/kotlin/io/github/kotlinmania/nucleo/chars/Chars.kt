@@ -2,6 +2,7 @@
 package io.github.kotlinmania.nucleo.chars
 
 import io.github.kotlinmania.nucleo.Config
+import io.github.kotlinmania.unicodesegmentation.graphemes
 
 /**
  * Character classification for boundary and scoring heuristics.
@@ -197,40 +198,16 @@ public fun normalize(c: Char, config: Config): Char {
 }
 
 /**
- * Returns the first character of each Unicode grapheme in a string.
+ * Nucleo cannot match graphemes as single units. To work around
+ * that we only use the first codepoint of each grapheme. This
+ * iterator returns the first character of each unicode grapheme
+ * in a string and is used for constructing `Utf32Str(ing)`.
  */
 public fun graphemes(text: String): Sequence<Char> =
-    sequence {
-        var i = 0
-        while (i < text.length) {
-            val c = text[i]
-            if (c == '\r' && i + 1 < text.length && text[i + 1] == '\n') {
-                yield('\n')
-                i += 2
-            } else {
-                yield(c)
-                i++
-                while (i < text.length) {
-                    val next = text[i]
-                    if (next == '\r' || next == '\n') break
-                    val cat = next.category
-                    if (cat == CharCategory.NON_SPACING_MARK ||
-                        cat == CharCategory.COMBINING_SPACING_MARK ||
-                        cat == CharCategory.ENCLOSING_MARK ||
-                        cat == CharCategory.FORMAT ||
-                        next == '\u200D' ||
-                        (next.code in 0xFE00..0xFE0F)
-                    ) {
-                        i++
-                    } else {
-                        break
-                    }
-                }
-            }
+    text.graphemes(true).map { grapheme ->
+        if (grapheme == "\r\n") {
+            '\n'
+        } else {
+            grapheme.first()
         }
     }
-
-/**
- * Type alias matching upstream `Char` trait representation in Kotlin.
- */
-public typealias Char = kotlin.Char
