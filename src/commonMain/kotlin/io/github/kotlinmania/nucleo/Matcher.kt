@@ -1,4 +1,3 @@
-// port-lint: source matcher/src/lib.rs
 package io.github.kotlinmania.nucleo
 
 import io.github.kotlinmania.nucleo.chars.AsciiChar
